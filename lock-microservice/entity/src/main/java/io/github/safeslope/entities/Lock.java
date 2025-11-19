@@ -1,8 +1,7 @@
 package io.github.safeslope.entities;
 
-import java.lang.annotation.Inherited;
 import java.time.LocalDateTime;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "lock")

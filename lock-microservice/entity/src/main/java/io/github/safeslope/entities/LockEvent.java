@@ -1,6 +1,7 @@
 package io.github.safeslope.entities;
 
-import javax.persistence.*;
+import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "lock_event")
@@ -33,7 +34,7 @@ public class LockEvent {
 
     //getters and setters
     public Integer getId(){
-        return this.id
+        return this.id;
     }
 
     public LocalDateTime getEventTime(){

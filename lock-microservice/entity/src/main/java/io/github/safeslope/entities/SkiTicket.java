@@ -1,6 +1,7 @@
 package io.github.safeslope.entities;
 
-import javax.persistence.*;
+import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "ski_ticket")

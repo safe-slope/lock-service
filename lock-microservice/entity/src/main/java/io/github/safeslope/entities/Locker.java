@@ -1,6 +1,8 @@
 package io.github.safeslope.entities;
 
-import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.List;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "locker")

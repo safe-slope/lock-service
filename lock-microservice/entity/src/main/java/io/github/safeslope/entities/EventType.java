@@ -1,6 +1,7 @@
 package io.github.safeslope.entities;
 
-import javax.persistence.*;
+import java.util.List;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "event_type")
@@ -26,7 +27,7 @@ public class EventType {
         MALFUNCTION
     }
 
-    @OneToMany(mappedBy = "event_type", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "eventType", cascade = CascadeType.ALL)
     private List<LockEvent> lockEvents;
 
     //getters and setters
@@ -42,7 +43,7 @@ public class EventType {
         this.name = name;
     }
 
-    public List<Lock> getLocks() {
-        return locks;
+    public List<LockEvent> getLockEvents() {
+        return lockEvents;
     }
 }
