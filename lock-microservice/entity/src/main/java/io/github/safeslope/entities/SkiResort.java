@@ -1,6 +1,7 @@
 package io.github.safeslope.entities;
 
-import javax.persistence.*;
+import java.util.List;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "ski_resort")
@@ -21,10 +22,10 @@ public class SkiResort {
     @Column(name = "address")
     private String address;
 
-    @OneToMany(mappedBy = "ski_resort", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "skiResort", cascade = CascadeType.ALL)
     private List<Locker> lockers;
 
-    @OneToMany(mappedBy = "ski_resort", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "skiResort", cascade = CascadeType.ALL)
     private List<SkiTicket> skiTickets;
 
     //getters and setters

@@ -1,6 +1,8 @@
 package io.github.safeslope.entities;
 
-import javax.persistence.*;
+import java.awt.Point;
+import java.util.List;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "location")
