@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.github.safeslope</groupId>
-  <artifactId>skilock-service-template</artifactId>
+  <artifactId>lock-service</artifactId>
   <version>0.1.0-SNAPSHOT</version>
 
   <packaging>pom</packaging>
@@ -16,19 +16,35 @@
     <module>api</module>
   </modules>
 
-  <name>Service Template</name>
-  <description>Service template with layered modules: api, service, entity</description>
+  <name>Lock Service</name>
+  <description>Lock service with layered modules: api, service, entity</description>
 
   <properties>
     <java.version>21</java.version>
 
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+    <!-- Use the java.version property so modules inherit the target Java release -->
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
 
     <spring.boot.version>3.3.4</spring.boot.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.11.0</version>
+          <configuration>
+            <release>${java.version}</release>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 
   <dependencyManagement>
     <dependencies>
