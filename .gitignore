@@ -1,4 +1,5 @@
 .vscode
+.github/
 
 target/
 pom.xml.tag
