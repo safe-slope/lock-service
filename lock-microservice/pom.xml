@@ -2,22 +2,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.github.safeslope</groupId>
   <artifactId>lock-service</artifactId>
   <version>0.1.0-SNAPSHOT</version>
-
   <packaging>pom</packaging>
+
+  <name>Lock Service</name>
+  <description>Lock service with layered modules: api, service, entity</description>
 
   <modules>
     <module>entity</module>
     <module>service</module>
     <module>api</module>
   </modules>
-
-  <name>Lock Service</name>
-  <description>Lock service with layered modules: api, service, entity</description>
 
   <properties>
     <java.version>21</java.version>
@@ -34,6 +33,7 @@
   <build>
     <pluginManagement>
       <plugins>
+        <!-- Compiler: use release so source/target are consistent with the JDK -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -42,40 +42,27 @@
             <release>${java.version}</release>
           </configuration>
         </plugin>
+
+        <!-- Centralize spring-boot plugin version for child modules -->
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>${spring.boot.version}</version>
+        </plugin>
+
       </plugins>
     </pluginManagement>
   </build>
 
   <dependencyManagement>
     <dependencies>
-      <!-- Use Spring Boot BOM to manage versions -->
+      <!-- Spring Boot BOM to manage versions of spring-boot starters and many common libraries -->
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
         <version>${spring.boot.version}</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
-
-      <dependency>
-        <groupId>org.postgresql</groupId>
-        <artifactId>postgresql</artifactId>
-      </dependency>
-
-      <dependency>
-          <groupId>io.github.safeslope</groupId>
-          <artifactId>api</artifactId>
-          <version>${project.version}</version>
-      </dependency>
-      <dependency>
-          <groupId>io.github.safeslope</groupId>
-          <artifactId>service</artifactId>
-          <version>${project.version}</version>
-      </dependency>
-      <dependency>
-          <groupId>io.github.safeslope</groupId>
-          <artifactId>entity</artifactId>
-          <version>${project.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
