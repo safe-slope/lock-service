@@ -35,8 +35,6 @@ public class LockEvent {
     private SkiTicket skiTicket;
 
     @Enumerated(EnumType.STRING)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_type_id")
     private EventType eventType;
 
     private enum EventType {
