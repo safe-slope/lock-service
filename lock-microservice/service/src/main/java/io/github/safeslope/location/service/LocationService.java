@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class LocationService{
+public class LocationService {
 
     private final LocationRepository locationRepository;
 
@@ -22,7 +22,8 @@ public class LocationService{
     }
 
     public Location get(Integer id) {
-        return locationRepository.findById(id);
+        return locationRepository.findById(id)
+            .orElseThrow(() -> new LocationNotFoundException(id));
     }
 
     public Location create(Location location) {
@@ -30,6 +31,7 @@ public class LocationService{
     }
 
     public Location update(Location location) {
+        // optionally check existence first; here we upsert via save()
         return locationRepository.save(location);
     }
 
