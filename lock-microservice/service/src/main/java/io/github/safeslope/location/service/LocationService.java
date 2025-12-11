@@ -9,11 +9,11 @@ import java.util.List;
 
 @Service
 @Transactional
-public class LocationServiceImpl implements LocationService {
+public class LocationService{
 
     private final LocationRepository locationRepository;
 
-    public LocationServiceImpl(LocationRepository locationRepository) {
+    public LocationService(LocationRepository locationRepository) {
         this.locationRepository = locationRepository;
     }
 
@@ -23,7 +23,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public <Location> get(Integer id) {
+    public Location get(Integer id) {
         return locationRepository.findById(id);
     }
 
