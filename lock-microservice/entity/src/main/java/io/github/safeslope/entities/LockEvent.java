@@ -28,9 +28,15 @@ public class LockEvent {
     @JoinColumn(name = "ski_ticket_id")
     private SkiTicket skiTicket;
 
-    @ManyToOne
-    @JoinColumn(name = "event_type_id")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "event_type")
     private EventType eventType;
+
+    private enum EventType {
+        LOCKED,
+        UNLOCKED,
+        MALFUNCTION
+    }
 
     //getters and setters
     public Integer getId(){
