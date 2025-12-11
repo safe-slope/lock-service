@@ -3,15 +3,20 @@ package io.github.safeslope.entities;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+import lombok.ToString;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "lock_event")
-@NamedQueries(value = 
-    {
-        //tu vpiši uporabne querije za lock event
-        @NamedQuery(name = "LockEvent.getAll", query = "SELECT le FROM LockEvent le")
-    }
-)
-
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(exclude = {"lockId"})
 public class LockEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,58 +25,23 @@ public class LockEvent {
     @Column(name = "event_time", columnDefinition = "TIMESTAMP")
     private LocalDateTime eventTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lock_id")
+    @JsonBackReference
     private Lock lockId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ski_ticket_id")
     private SkiTicket skiTicket;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "event_type")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_type_id")
     private EventType eventType;
 
     private enum EventType {
         LOCKED,
         UNLOCKED,
         MALFUNCTION
-    }
-
-    //getters and setters
-    public Integer getId(){
-        return this.id;
-    }
-
-    public LocalDateTime getEventTime(){
-        return this.eventTime;
-    }
-
-    public void setEventTime(LocalDateTime eventTime){
-        this.eventTime = eventTime;
-    }
-
-    public Lock getLockId(){
-        return this.lockId;
-    }
-
-    public void setLockId(Lock lockId){
-        this.lockId = lockId;
-    }
-
-    public SkiTicket getSkiTicket(){
-        return this.skiTicket;
-    }
-
-    public void setSkiTicket(SkiTicket skiTicket){
-        this.skiTicket = skiTicket;
-    }
-
-    public EventType getEventType(){
-        return this.eventType;
-    }
-
-    public void setEventType(EventType eventType){
-        this.eventType = eventType;
     }
 }
