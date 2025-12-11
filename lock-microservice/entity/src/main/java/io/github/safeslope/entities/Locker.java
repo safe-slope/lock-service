@@ -4,67 +4,41 @@ import java.sql.Timestamp;
 import java.util.List;
 import jakarta.persistence.*;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+import lombok.ToString;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Table(name = "locker")
-@NamedQueries(value = 
-    {
-        //tu vpiši uporabne querije za locker
-        @NamedQuery(name = "Locker.getAll", query = "SELECT l FROM Locker l"),
-        @NamedQuery(name = "Locker.findByMacAddress", query = "SELECT l FROM Locker l WHERE l.macAddress = :macAddress")
-    }
-)
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(exclude = {"locks", "skiResort"})
 public class Locker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "date_added", columnDefinition = "TIMESTAMP")
+    @CreationTimestamp
+    @Column(name = "date_added", columnDefinition = "TIMESTAMP", updatable = false)
     private Timestamp dateAdded;
 
     @Column(name = "mac_address")
     private String macAddress;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ski_resort_id")
+    @JsonBackReference
     private SkiResort skiResort;
 
-    @OneToMany(mappedBy = "locker", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "locker", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Lock> locks;
-
-    //getters and setters
-    public Integer getId() {
-        return id;
-    }
-
-    public Timestamp getDateAdded() {
-        return dateAdded;
-    }
-
-    public void setDateAdded(Timestamp dateAdded) {
-        this.dateAdded = dateAdded;
-    }
-
-    public String getMacAddress() {
-        return macAddress;
-    }
-
-    public void setMacAddress(String macAddress) {
-        this.macAddress = macAddress;
-    }
-
-    public SkiResort getSkiResort() {
-        return skiResort;
-    }
-
-    public void setSkiResort(SkiResort skiResort) {
-        this.skiResort = skiResort;
-    }
-
-    public List<Lock> getLocks() {
-        return locks;
-    }
-
-    public void setLocks(List<Lock> locks) {
-        this.locks = locks;
-    }
 }
