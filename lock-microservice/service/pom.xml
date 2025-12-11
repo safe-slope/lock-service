@@ -20,7 +20,6 @@
     <dependency>
       <groupId>io.github.safeslope</groupId>
       <artifactId>entity</artifactId>
-      <version>${project.version}</version>
     </dependency>
 
     <!-- Spring Data JPA + transitively brings spring-boot-starter (spring core), hibernate, jakarta.persistence -->
