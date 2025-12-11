@@ -3,14 +3,20 @@ package io.github.safeslope.entities;
 import java.util.List;
 import jakarta.persistence.*;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+import lombok.ToString;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "ski_resort")
-@NamedQueries(value = 
-    {
-        //tu vpiši uporabne querije
-        @NamedQuery(name = "SkiResort.getAll", query = "SELECT sr FROM SkiResort sr")
-    }
-)
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(exclude = {"lockers", "skiTickets"})
 public class SkiResort {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,46 +28,11 @@ public class SkiResort {
     @Column(name = "address")
     private String address;
 
-    @OneToMany(mappedBy = "skiResort", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "skiResort", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Locker> lockers;
 
-    @OneToMany(mappedBy = "skiResort", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "skiResort", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<SkiTicket> skiTickets;
-
-    //getters and setters
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public List<Locker> getLockers() {
-        return lockers;
-    }
-
-    public void setLockers(List<Locker> lockers) {
-        this.lockers = lockers;
-    }
-
-    public List<SkiTicket> getSkiTickets() {
-        return skiTickets;
-    }
-
-    public void setSkiTickets(List<SkiTicket> skiTickets) {
-        this.skiTickets = skiTickets;
-    }
 }
