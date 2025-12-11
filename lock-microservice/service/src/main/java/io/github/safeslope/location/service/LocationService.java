@@ -17,27 +17,22 @@ public class LocationService{
         this.locationRepository = locationRepository;
     }
 
-    @Override
     public List<Location> getAll() {
         return locationRepository.findAll();
     }
 
-    @Override
     public Location get(Integer id) {
         return locationRepository.findById(id);
     }
 
-    @Override
     public Location create(Location location) {
         return locationRepository.save(location);
     }
 
-    @Override
     public Location update(Location location) {
         return locationRepository.save(location);
     }
 
-    @Override
     public void delete(Integer id) {
         locationRepository.deleteById(id);
     }
