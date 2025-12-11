@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class LockService{
+public class LockService {
     private final LockRepository repo;
 
     public LockService(LockRepository repo) {
@@ -21,12 +21,11 @@ public class LockService{
     public Lock getLock(Integer id) {
         return repo.findById(id)
             .orElseThrow(() -> new LockNotFoundException(id));
-     
     }
 
     public Lock getByMacAddress(String mac) {
-        return repo.findByMacAddress(mac);
-             .orElseThrow(() -> new LockNotFoundException(mac));
+        return repo.findByMacAddress(mac)
+            .orElseThrow(() -> new LockNotFoundException(mac));
     }
 
     public Lock create(Lock lock) {
