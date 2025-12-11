@@ -16,13 +16,26 @@
   <description>JPA entities and domain objects</description>
 
   <dependencies>
-    <!-- Keep entities minimal: JPA and validation APIs as provided so consumers supply runtime impl -->
+    <!-- Spring Boot JPA starter brings Hibernate and Jakarta JPA API -->
     <dependency>
-      <groupId>jakarta.persistence</groupId>
-      <artifactId>jakarta.persistence-api</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+
+    <!-- Jackson annotations (for @JsonBackReference / @JsonManagedReference etc.) -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+    </dependency>
+
+    <!-- Lombok: annotation generation at compile time. Use provided or compileOnly + annotationProcessor -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
       <scope>provided</scope>
     </dependency>
 
+    <!-- Validation API (kept provided if runtime will supply it) -->
     <dependency>
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>

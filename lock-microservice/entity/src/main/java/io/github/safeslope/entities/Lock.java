@@ -2,72 +2,37 @@ package io.github.safeslope.entities;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "lock")
-@NamedQueries(value = 
-    {
-        //tu vpiši uporabne querije za lock
-        @NamedQuery(name = "Lock.getAll", query = "SELECT l FROM Lock l"),
-        @NamedQuery(name = "Lock.findByMacAddress", query = "SELECT l FROM Lock l WHERE l.macAddress = :macAddress"),
-        @NamedQuery(name = "Lock.findByLockerId", query = "SELECT l FROM Lock l WHERE l.locker.id = :lockerId")
-    }
-)
-
+@Table(name = "locks")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Lock {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "date_added", columnDefinition = "TIMESTAMP")
+    @CreationTimestamp
+    @Column(name = "date_added", updatable = false)
     private LocalDateTime dateAdded;
 
-    @Column(name = "mac_address")
+    @Column(name = "mac_address", nullable = false, unique = true)
     private String macAddress;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "locker_id")
+    @JsonBackReference
     private Locker locker;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
+    @JsonBackReference
     private Location location;
-
-    //getters and setters
-    public Integer getId() {
-        return id;
-    }
-
-    public LocalDateTime getDateAdded() {
-        return dateAdded;
-    }
-
-    public void setDateAdded(LocalDateTime dateAdded) {
-        this.dateAdded = dateAdded;
-    }
-
-    public String getMacAddress() {
-        return macAddress;
-    }
-
-    public void setMacAddress(String macAddress) {
-        this.macAddress = macAddress;
-    }
-
-    public Locker getLocker() {
-        return locker;
-    }
-
-    public void setLocker(Locker locker) {
-        this.locker = locker;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
 }
