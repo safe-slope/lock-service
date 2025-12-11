@@ -16,25 +16,27 @@
   <description>Business logic and repository layer</description>
 
   <dependencies>
-    <!-- Core Spring context -->
+    <!-- dependency on the entity module so service compiles against domain classes -->
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter</artifactId>
+      <groupId>io.github.safeslope</groupId>
+      <artifactId>entity</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
-    <!-- JPA repositories and runtime persistence -->
+    <!-- Spring Data JPA + transitively brings spring-boot-starter (spring core), hibernate, jakarta.persistence -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
-    <!-- Entities module -->
+    <!-- Lombok for reduced boilerplate (provided or compileOnly is fine) -->
     <dependency>
-      <groupId>io.github.safeslope</groupId>
-      <artifactId>entity</artifactId>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
     </dependency>
 
-    <!-- Testing -->
+    <!-- Test helpers -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
