@@ -4,8 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-import java.sql.Timestamp;
-import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -13,7 +12,7 @@ import jakarta.validation.constraints.NotNull;
 public class SkiTicketDto {
     private Integer id;
     private String ticketNumber;
-    private Timestamp validFrom;
-    private Timestamp validUntil;
+    private LocalDateTime validFrom;
+    private LocalDateTime validUntil;
     private Integer skiResortId;
 }
