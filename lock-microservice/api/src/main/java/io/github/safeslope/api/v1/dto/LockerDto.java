@@ -4,14 +4,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class LockerDto {
     private Integer id;
-    private Timestamp dateAdded;
+    private LocalDateTime dateAdded;
     private String macAddress;
     private Integer skiResortId;
 }
