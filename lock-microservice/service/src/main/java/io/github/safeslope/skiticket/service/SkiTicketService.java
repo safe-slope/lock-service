@@ -22,30 +22,27 @@ public class SkiTicketService {
         return repo.findAll();
     }
 
-    public Optional<SkiTicket> get(Integer id) {
-        return repo.findById(id);
+    public SkiTicket get(Integer id) {
+        return repo.findById(id)
+            .orElseThrow(() -> new SkiTicketNotFoundException(id));
     }
 
     public SkiTicket create(SkiTicket ticket) {
         return repo.save(ticket);
     }
 
-    public Optional<SkiTicket> update(Integer id, SkiTicket updated) {
-        return repo.findById(id).map(existing -> {
-
-            existing.setValidFrom(updated.getValidFrom());
-            existing.setValidTo(updated.getValidTo());
-            existing.setSkiResort(updated.getSkiResort());
-
-            return repo.save(existing);
-        });
+    public SkiTicket update(Integer id, SkiTicket updated) {
+        SkiTicket existing = repo.findById(id)
+            .orElseThrow(() -> new SkiTicketNotFoundException(id));
+        existing.setValidFrom(updated.getValidFrom());
+        existing.setValidTo(updated.getValidTo());
+        return repo.save(existing);
     }
 
-    public boolean delete(Integer id) {
+    public void delete(Integer id) {
         if (!repo.existsById(id)) {
-            return false;
+            throw new SkiTicketNotFoundException(id);
         }
         repo.deleteById(id);
-        return true;
     }
 }
