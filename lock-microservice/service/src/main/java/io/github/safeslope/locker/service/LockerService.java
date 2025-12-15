@@ -35,15 +35,17 @@ public class LockerService{
         return lockerRepository.save(locker);
     }
 
-    public Locker update(Locker locker) {
-        // optional: verify exists first, or rely on save() to upsert behavior
-        if (locker.getId() == null || !lockerRepository.existsById(locker.getId())) {
-            throw new LockerNotFoundException(locker.getId());
-        }
+    public Locker update(Integer id, Locker locker) {
+        lockerRepository.findById(id)
+            .orElseThrow(() -> new LockerNotFoundException(id));
+        locker.setId(id);
         return lockerRepository.save(locker);
     }
 
     public void delete(Integer id) {
+        if (!lockerRepository.existsById(id)) {
+            throw new LockerNotFoundException(id);
+        }
         lockerRepository.deleteById(id);
     }
 }
