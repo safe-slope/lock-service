@@ -17,37 +17,33 @@
   <description>API module for the lock service</description>
 
   <dependencies>
-    <!-- Web + actuator -->
+    <!-- Service module dependency so controllers can call application services -->
+    <dependency>
+      <groupId>io.github.safeslope</groupId>
+      <artifactId>service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- Spring Boot Web (includes Jackson, validation support for REST controllers) -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-
-    <!-- Validation for @Valid etc. -->
+    <!-- Bean validation for @Valid on request DTOs -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
 
-    <!-- Postgres driver needed at runtime (BOM in parent supplies the version) -->
+    <!-- Lombok (compile-time only); parent already provides version -->
     <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <scope>runtime</scope>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
     </dependency>
 
-    <!-- Services module (no version required when built in same reactor) -->
-    <dependency>
-      <groupId>io.github.safeslope</groupId>
-      <artifactId>service</artifactId>
-    </dependency>
-
-    <!-- Testing -->
+    <!-- Tests -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
