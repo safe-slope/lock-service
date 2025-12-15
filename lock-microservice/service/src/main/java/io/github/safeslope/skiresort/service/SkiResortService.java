@@ -21,29 +21,30 @@ public class SkiResortService {
     public List<SkiResort> getAll() {
         return repo.findAll();
     }
-    public Optional<SkiResort> get(Integer id) {
-        return repo.findById(id);
+    
+    
+     public SkiResort get(Integer id) {
+        return repo.findById(id)
+            .orElseThrow(() -> new SkiResortNotFoundException(id));
     }
 
     public SkiResort create(SkiResort resort) {
         return repo.save(resort);
     }
 
-    public Optional<SkiResort> update(Integer id, SkiResort updated) {
-        return repo.findById(id).map(existing -> {
-            existing.setName(updated.getName());
-            existing.setAddress(updated.getAddress());
-            existing.setLockers(updated.getLockers());
-          //  existing.setSkiTickets(updated.getSkiTickets()); 
-            return repo.save(existing);
-        });
+     public SkiResort update(Integer id, SkiResort updated) {
+        SkiResort existing = repo.findById(id)
+            .orElseThrow(() -> new SkiResortNotFoundException(id));
+
+        existing.setName(updated.getName());
+        existing.setAddress(updated.getAddress());
+        return repo.save(existing);
     }
 
-    public boolean delete(Integer id) {
+    public void delete(Integer id) {
         if (!repo.existsById(id)) {
-            return false;
+            throw new SkiResortNotFoundException(id);
         }
         repo.deleteById(id);
-        return true;
     }
 }
