@@ -30,12 +30,18 @@ public class LocationService {
         return locationRepository.save(location);
     }
 
-    public Location update(Location location) {
-        // optionally check existence first; here we upsert via save()
+    public Location update(Integer id, Location location) {
+        Location exist = locationRepository.findById(id)
+            .orElseThrow(() -> new LocationNotFoundException(id));
+        location.setId(exist.getId());
         return locationRepository.save(location);
     }
 
+
     public void delete(Integer id) {
+        if (!locationRepository.existsById(id)) {
+            throw new LocationNotFoundException(id);
+        }
         locationRepository.deleteById(id);
     }
 }
