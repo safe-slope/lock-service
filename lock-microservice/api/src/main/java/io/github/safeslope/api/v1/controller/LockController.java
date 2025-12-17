@@ -1,18 +1,13 @@
 package io.github.safeslope.api.v1.controller;
 
-import io.github.safeslope.api.ApiConstants;
 import io.github.safeslope.api.v1.dto.LockDto;
 import io.github.safeslope.entities.Lock;
-import io.github.safeslope.entities.Locker;
-import io.github.safeslope.entities.Location;
 import io.github.safeslope.lock.service.LockService;
 import io.github.safeslope.locker.service.LockerService;
 import io.github.safeslope.location.service.LocationService;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
