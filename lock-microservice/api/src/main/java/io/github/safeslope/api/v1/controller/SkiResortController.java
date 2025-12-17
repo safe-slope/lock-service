@@ -5,6 +5,7 @@ import io.github.safeslope.api.ApiConstants;
 import io.github.safeslope.api.v1.dto.SkiResortDto;
 import io.github.safeslope.entities.SkiResort;
 import io.github.safeslope.skiresort.service.SkiResortService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,11 @@ public class SkiResortController {
     @GetMapping("/{id}")
     public SkiResortDto get(@PathVariable Integer id) { return toDto(skiResortService.get(id));}
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        skiResortService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 
 
     private SkiResortDto toDto(SkiResort s) {
