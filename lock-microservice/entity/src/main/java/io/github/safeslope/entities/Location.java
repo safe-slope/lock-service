@@ -4,11 +4,7 @@ import java.awt.Point;
 import java.util.List;
 import jakarta.persistence.*;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.AccessLevel;
-import lombok.ToString;
+import lombok.*;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -17,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @ToString(exclude = "locks")
 public class Location {
     @Id
