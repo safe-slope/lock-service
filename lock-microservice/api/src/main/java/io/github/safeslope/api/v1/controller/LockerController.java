@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(ApiConstants.V1 + "/lockers")
+@RequestMapping("/api/v1/lockers")
 public class LockerController {
 
     private final LockerService lockerService;

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(ApiConstants.V1 + "/skiresorts")
+@RequestMapping("/api/v1/skiresorts")
 public class SkiResortController {
 
     private final SkiResortService skiResortService;
