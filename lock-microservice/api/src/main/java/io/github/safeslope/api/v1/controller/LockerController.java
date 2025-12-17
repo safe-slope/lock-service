@@ -16,11 +16,9 @@ import java.util.stream.Collectors;
 public class LockerController {
 
     private final LockerService lockerService;
-    private final SkiResortService skiResortService;
 
     public LockerController(LockerService lockerService, SkiResortService skiResortService) {
         this.lockerService = lockerService;
-        this.skiResortService = skiResortService;
     }
 
     @GetMapping
