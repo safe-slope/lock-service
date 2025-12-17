@@ -1,6 +1,5 @@
 package io.github.safeslope.api.v1.controller;
 
-import io.github.safeslope.api.ApiConstants;
 import io.github.safeslope.api.v1.dto.LockerDto;
 import io.github.safeslope.entities.Locker;
 import io.github.safeslope.locker.service.LockerService;

@@ -1,7 +1,6 @@
 package io.github.safeslope.api.v1.controller;
 
 
-import io.github.safeslope.api.ApiConstants;
 import io.github.safeslope.api.v1.dto.SkiResortDto;
 import io.github.safeslope.entities.SkiResort;
 import io.github.safeslope.skiresort.service.SkiResortService;
