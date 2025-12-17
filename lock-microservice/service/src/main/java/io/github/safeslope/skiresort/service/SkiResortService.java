@@ -33,6 +33,7 @@ public class SkiResortService {
     }
 
     public SkiResort update(Integer id, SkiResort updated) {
+        // FIXME to rabi najprej najdt taprav entity in ga spremenit
         return repo.save(updated);
     }
 
