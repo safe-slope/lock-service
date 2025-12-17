@@ -1,6 +1,6 @@
 package io.github.safeslope.entities;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import jakarta.persistence.*;
 
@@ -28,7 +28,7 @@ public class Locker {
 
     @CreationTimestamp
     @Column(name = "date_added", columnDefinition = "TIMESTAMP", updatable = false)
-    private Timestamp dateAdded;
+    private LocalDateTime dateAdded;
 
     @Column(name = "mac_address")
     private String macAddress;
