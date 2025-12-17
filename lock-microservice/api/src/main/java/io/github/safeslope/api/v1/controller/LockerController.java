@@ -3,14 +3,11 @@ package io.github.safeslope.api.v1.controller;
 import io.github.safeslope.api.ApiConstants;
 import io.github.safeslope.api.v1.dto.LockerDto;
 import io.github.safeslope.entities.Locker;
-import io.github.safeslope.entities.SkiResort;
 import io.github.safeslope.locker.service.LockerService;
 import io.github.safeslope.skiresort.service.SkiResortService;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,11 +47,5 @@ public class LockerController {
                 l.getMacAddress(),
                 l.getSkiResort() != null ? l.getSkiResort().getId() : null
         );
-    }
-
-    private Locker fromDto(LockerDto d) {
-        Locker l = new Locker();
-        l.setMacAddress(d.getMacAddress());
-        return l;
     }
 }
