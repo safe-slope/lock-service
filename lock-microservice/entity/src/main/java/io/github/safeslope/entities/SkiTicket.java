@@ -3,11 +3,7 @@ package io.github.safeslope.entities;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.AccessLevel;
-import lombok.ToString;
+import lombok.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -16,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @ToString(exclude = {"skiResort"})
 public class SkiTicket {
     @Id
