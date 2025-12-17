@@ -31,6 +31,11 @@ public class LockController {
         return toDto(lockService.getLock(id));
     }
 
+    @GetMapping("/mac/{mac}")
+    public LockDto getByMac(@PathVariable String mac) {
+        return toDto(lockService.getByMacAddress(mac));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         lockService.delete(id);
