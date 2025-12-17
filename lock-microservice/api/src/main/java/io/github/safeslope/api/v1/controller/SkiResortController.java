@@ -35,12 +35,12 @@ public class SkiResortController {
 
     @GetMapping("/{id}/lockers")
     public List<LockerDto> getLockers(@PathVariable Integer id) {
-
+        // TODO klici metodo v SkiResortService
     }
 
     @GetMapping("/{id}/locks")
     public List<LockDto> getLocks(@PathVariable Integer id) {
-
+        // TODO klici metodo v SkiResortService
     }
 
 
