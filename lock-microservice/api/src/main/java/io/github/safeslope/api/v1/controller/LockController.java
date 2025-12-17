@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(ApiConstants.V1 + "/locks")
+@RequestMapping("/api/v1/locks")
 public class LockController {
 
     private final LockService lockService;
