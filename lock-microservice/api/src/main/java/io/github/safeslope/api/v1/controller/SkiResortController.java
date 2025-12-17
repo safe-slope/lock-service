@@ -1,6 +1,8 @@
 package io.github.safeslope.api.v1.controller;
 
 
+import io.github.safeslope.api.v1.dto.LockDto;
+import io.github.safeslope.api.v1.dto.LockerDto;
 import io.github.safeslope.api.v1.dto.SkiResortDto;
 import io.github.safeslope.entities.SkiResort;
 import io.github.safeslope.skiresort.service.SkiResortService;
@@ -27,6 +29,20 @@ public class SkiResortController {
 
     @GetMapping("/{id}")
     public SkiResortDto get(@PathVariable Integer id) { return toDto(skiResortService.get(id));}
+
+    @GetMapping("/name/{name}")
+    public SkiResortDto getByName(@PathVariable String name) { return toDto(skiResortService.getByName(name));}
+
+    @GetMapping("/{id}/lockers")
+    public List<LockerDto> getLockers(@PathVariable Integer id) {
+
+    }
+
+    @GetMapping("/{id}/locks")
+    public List<LockDto> getLocks(@PathVariable Integer id) {
+
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
