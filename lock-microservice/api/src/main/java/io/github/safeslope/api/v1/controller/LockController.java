@@ -40,35 +40,6 @@ public class LockController {
         return toDto(lockService.getLock(id));
     }
 
-    @PostMapping
-    public ResponseEntity<LockDto> create(@Valid @RequestBody LockDto dto) {
-        Lock entity = fromDto(dto);
-        Locker locker = lockerService.get(dto.getLockerId());
-        entity.setLocker(locker);
-        if (dto.getLocationId() != null) {
-            Location loc = locationService.get(dto.getLocationId());
-            entity.setLocation(loc);
-        }
-        Lock saved = lockService.create(entity);
-        LockDto out = toDto(saved);
-        return ResponseEntity.created(URI.create(ApiConstants.V1 + "/locks/" + out.getId())).body(out);
-    }
-
-    @PutMapping("/{id}")
-    public LockDto update(@PathVariable Integer id, @Valid @RequestBody LockDto dto) {
-        Lock existing = lockService.getLock(id);
-        existing.setMacAddress(dto.getMacAddress());
-        if (!existing.getLocker().getId().equals(dto.getLockerId())) {
-            existing.setLocker(lockerService.get(dto.getLockerId()));
-        }
-        if (dto.getLocationId() != null) {
-            existing.setLocation(locationService.get(dto.getLocationId()));
-        } else {
-            existing.setLocation(null);
-        }
-        return toDto(lockService.create(existing));
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         lockService.delete(id);
