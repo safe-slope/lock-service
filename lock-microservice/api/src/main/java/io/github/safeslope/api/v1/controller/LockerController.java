@@ -1,5 +1,6 @@
 package io.github.safeslope.api.v1.controller;
 
+import io.github.safeslope.api.v1.dto.LockDto;
 import io.github.safeslope.api.v1.dto.LockerDto;
 import io.github.safeslope.entities.Locker;
 import io.github.safeslope.locker.service.LockerService;
@@ -32,6 +33,11 @@ public class LockerController {
     @GetMapping("/mac/{mac}")
     public LockerDto getByMac(@PathVariable String mac) {
         return toDto(lockerService.getByMacAddress(mac));
+    }
+
+    @GetMapping("/{id}/locks")
+    public List<LockDto> getLocks(@PathVariable Integer id) {
+        // TODO klici metodo v LockerService
     }
 
     @DeleteMapping("/{id}")
