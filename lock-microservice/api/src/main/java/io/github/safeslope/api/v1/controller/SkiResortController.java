@@ -35,6 +35,13 @@ public class SkiResortController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping
+    public ResponseEntity<SkiResortDto> create(@RequestBody SkiResortDto dto) {
+        SkiResort entity = fromDto(dto);
+        SkiResort saved = skiResortService.create(entity);
+        return ResponseEntity.ok(toDto(saved));
+    }
+
 
     private SkiResortDto toDto(SkiResort s) {
         return new SkiResortDto(
@@ -43,4 +50,12 @@ public class SkiResortController {
                 s.getAddress()
         );
     }
+
+    private SkiResort fromDto(SkiResortDto d){
+        return SkiResort.builder()
+                .name(d.getName())
+                .address(d.getAddress())
+                .build();
+    }
+
 }
