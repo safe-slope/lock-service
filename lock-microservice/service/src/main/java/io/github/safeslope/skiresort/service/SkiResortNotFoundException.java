@@ -1,5 +1,7 @@
+package io.github.safeslope.skiresort.service;
+
 public class SkiResortNotFoundException extends RuntimeException {
     public SkiResortNotFoundException(Integer id) {
-        super("SkiResort with ID " + id + " not found.");
+        super("Ski resort with ID " + id + " not found.");
     }
 }

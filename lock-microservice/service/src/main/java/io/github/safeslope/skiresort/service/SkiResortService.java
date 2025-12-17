@@ -1,6 +1,7 @@
 package io.github.safeslope.skiresort.service;
 
 import io.github.safeslope.entities.SkiResort;
+import io.github.safeslope.lockevent.service.LockEventNotFoundException;
 import io.github.safeslope.skiresort.repository.SkiResortRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -21,18 +22,17 @@ public class SkiResortService {
     public List<SkiResort> getAll() {
         return repo.findAll();
     }
-    
-    
-     public SkiResort get(Integer id) {
-        return repo.findById(id)
-            .orElseThrow(() -> new SkiResortNotFoundException(id));
+    public SkiResort get(Integer id) {
+
+        return repo.findById(id).
+                orElseThrow(() -> new SkiResortNotFoundException(id));
     }
 
     public SkiResort create(SkiResort resort) {
         return repo.save(resort);
     }
 
-     public SkiResort update(Integer id, SkiResort updated) {
+    public SkiResort update(Integer id, SkiResort updated) {
         SkiResort existing = repo.findById(id)
             .orElseThrow(() -> new SkiResortNotFoundException(id));
 

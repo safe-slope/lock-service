@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface SkiResortRepository extends JpaRepository<SkiResort, Integer> {
-     Optional<SkiResort> findByName(String name);
+     SkiResort findByName(String name);
 }
