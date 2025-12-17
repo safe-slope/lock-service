@@ -1,5 +1,6 @@
 package io.github.safeslope.locker.service;
 
+import io.github.safeslope.entities.Lock;
 import io.github.safeslope.entities.Locker;
 import io.github.safeslope.locker.repository.LockerRepository;
 import jakarta.transaction.Transactional;
@@ -29,6 +30,10 @@ public class LockerService{
     public Locker getByMacAddress(String mac) {
         return lockerRepository.findByMacAddress(mac)
             .orElseThrow(() -> new LockerNotFoundException(mac));
+    }
+
+    public List<Lock> getLocks(Integer lockerId) {
+        // TODO implementiraj metodo, ki najde vse Locke za Locker s podanim id-jem
     }
 
     public Locker create(Locker locker) {
