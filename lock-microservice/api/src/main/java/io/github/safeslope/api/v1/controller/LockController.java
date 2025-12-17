@@ -21,13 +21,9 @@ import java.util.stream.Collectors;
 public class LockController {
 
     private final LockService lockService;
-    private final LockerService lockerService;
-    private final LocationService locationService;
 
     public LockController(LockService lockService, LockerService lockerService, LocationService locationService) {
         this.lockService = lockService;
-        this.lockerService = lockerService;
-        this.locationService = locationService;
     }
 
     @GetMapping
@@ -54,11 +50,5 @@ public class LockController {
                 l.getLocker() != null ? l.getLocker().getId() : null,
                 l.getLocation() != null ? l.getLocation().getId() : null
         );
-    }
-
-    private Lock fromDto(LockDto d) {
-        Lock l = new Lock();
-        l.setMacAddress(d.getMacAddress());
-        return l;
     }
 }
