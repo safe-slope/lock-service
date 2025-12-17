@@ -3,8 +3,6 @@ package io.github.safeslope.api.v1.controller;
 import io.github.safeslope.api.v1.dto.LockDto;
 import io.github.safeslope.entities.Lock;
 import io.github.safeslope.lock.service.LockService;
-import io.github.safeslope.locker.service.LockerService;
-import io.github.safeslope.location.service.LocationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +15,7 @@ public class LockController {
 
     private final LockService lockService;
 
-    public LockController(LockService lockService, LockerService lockerService, LocationService locationService) {
+    public LockController(LockService lockService) {
         this.lockService = lockService;
     }
 

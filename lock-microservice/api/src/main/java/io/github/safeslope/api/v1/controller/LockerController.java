@@ -3,7 +3,6 @@ package io.github.safeslope.api.v1.controller;
 import io.github.safeslope.api.v1.dto.LockerDto;
 import io.github.safeslope.entities.Locker;
 import io.github.safeslope.locker.service.LockerService;
-import io.github.safeslope.skiresort.service.SkiResortService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +15,7 @@ public class LockerController {
 
     private final LockerService lockerService;
 
-    public LockerController(LockerService lockerService, SkiResortService skiResortService) {
+    public LockerController(LockerService lockerService) {
         this.lockerService = lockerService;
     }
 
