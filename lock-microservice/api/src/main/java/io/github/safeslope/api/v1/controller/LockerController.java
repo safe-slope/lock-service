@@ -30,6 +30,10 @@ public class LockerController {
         return toDto(lockerService.get(id));
     }
 
+    @GetMapping("/mac/{mac}")
+    public LockerDto getByMac(@PathVariable String mac) {
+        return toDto(lockerService.getByMacAddress(mac));
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
