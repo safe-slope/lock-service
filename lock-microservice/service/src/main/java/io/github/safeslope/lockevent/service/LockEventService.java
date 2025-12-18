@@ -36,7 +36,7 @@ public class LockEventService {
     }
 
     public List<LockEvent> getAllBySkiResort(Integer skiResortId) {
-        return repo.findBySkiResort_Id(skiResortId);
+        return repo.findByLock_Locker_SkiResort_Id(skiResortId);
     }
 
     public LockEvent create(LockEvent event) {

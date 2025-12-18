@@ -1,7 +1,6 @@
 package io.github.safeslope.lockevent.repository;
 
 import io.github.safeslope.entities.LockEvent;
-import io.github.safeslope.entities.Locker;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,5 +16,5 @@ public interface LockEventRepository extends JpaRepository<LockEvent, Integer> {
     List<LockEvent> findBySkiTicket_IdOrderByEventTimeDesc(Integer skiTicketId);
 
     // vsi eventi za ski resort
-    List<LockEvent> findBySkiResort_Id(Integer skiResortId);
+    List<LockEvent> findByLock_Locker_SkiResort_Id(Integer skiResortId);
 }
