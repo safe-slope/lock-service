@@ -1,19 +1,14 @@
 package io.github.safeslope.api.v1.controller;
 
 
-import io.github.safeslope.api.v1.dto.LockDto;
-import io.github.safeslope.api.v1.dto.LockEventDto;
-import io.github.safeslope.api.v1.dto.LockerDto;
-import io.github.safeslope.api.v1.dto.SkiResortDto;
-import io.github.safeslope.api.v1.mapper.LockEventMapper;
-import io.github.safeslope.api.v1.mapper.LockMapper;
-import io.github.safeslope.api.v1.mapper.LockerMapper;
-import io.github.safeslope.api.v1.mapper.SkiResortMapper;
+import io.github.safeslope.api.v1.dto.*;
+import io.github.safeslope.api.v1.mapper.*;
 import io.github.safeslope.entities.SkiResort;
 import io.github.safeslope.lock.service.LockService;
 import io.github.safeslope.locker.service.LockerService;
 import io.github.safeslope.lockevent.service.LockEventService;
 import io.github.safeslope.skiresort.service.SkiResortService;
+import io.github.safeslope.skiticket.service.SkiTicketService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +28,8 @@ public class SkiResortController {
     private final LockEventMapper lockEventMapper;
     private final LockService lockService;
     private final LockMapper lockMapper;
+    private final SkiTicketService skiTicketService;
+    private final SkiTicketMapper skiTicketMapper;
 
     public SkiResortController(
             SkiResortService skiResortService,
@@ -42,7 +39,7 @@ public class SkiResortController {
             LockEventService lockEventService,
             LockEventMapper lockEventMapper,
             LockService lockService,
-            LockMapper lockMapper) {
+            LockMapper lockMapper, SkiTicketService skiTicketService, SkiTicketMapper skiTicketMapper) {
         this.skiResortService = skiResortService;
         this.skiResortMapper = skiResortMapper;
         this.lockerService = lockerService;
@@ -51,6 +48,8 @@ public class SkiResortController {
         this.lockEventMapper = lockEventMapper;
         this.lockService = lockService;
         this.lockMapper = lockMapper;
+        this.skiTicketService = skiTicketService;
+        this.skiTicketMapper = skiTicketMapper;
     }
 
     @GetMapping
@@ -81,6 +80,11 @@ public class SkiResortController {
     @GetMapping("/{id}/lock-events")
     public List<LockEventDto> getLockEvents(@PathVariable Integer id) {
         return lockEventMapper.toDtoList(lockEventService.getAllBySkiResort(id));
+    }
+
+    @GetMapping("{$id}/ski-tickets")
+    public List<SkiTicketDto> getSkiTickets(@PathVariable Integer id) {
+        return skiTicketMapper.toDtoList(skiTicketService.getAllBySkiResortId(id));
     }
 
 

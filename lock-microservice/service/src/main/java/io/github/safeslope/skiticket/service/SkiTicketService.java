@@ -45,4 +45,8 @@ public class SkiTicketService {
         }
         repo.deleteById(id);
     }
+
+    public List<SkiTicket> getAllBySkiResortId(Integer skiResortId) {
+        return repo.findBySkiResort_Id(skiResortId);
+    }
 }

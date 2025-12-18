@@ -4,6 +4,9 @@ import io.github.safeslope.entities.SkiTicket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface SkiTicketRepository extends JpaRepository<SkiTicket, Integer> {
+    List<SkiTicket> findBySkiResort_Id(Integer skiResortId);
 }
