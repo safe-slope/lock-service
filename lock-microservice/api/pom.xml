@@ -21,7 +21,12 @@
     <dependency>
       <groupId>io.github.safeslope</groupId>
       <artifactId>service</artifactId>
-      <version>${project.version}</version>
+    </dependency>
+
+    <!-- Entity module dependency -->
+    <dependency>
+      <groupId>io.github.safeslope</groupId>
+      <artifactId>entity</artifactId>
     </dependency>
 
     <!-- Spring Boot Web (includes Jackson, validation support for REST controllers) -->
@@ -46,6 +51,10 @@
     <!-- MapStruct (compile) + processor (annotation processing) -->
     <dependency>
       <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mapstruct</groupId>
       <artifactId>mapstruct-processor</artifactId>
       <scope>provided</scope>
     </dependency>
@@ -66,12 +75,12 @@
         <configuration>
           <annotationProcessorPaths>
             <path>
-              <groupId>org.mapstruct</groupId>
-              <artifactId>mapstruct-processor</artifactId>
-            </path>
-            <path>
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
+            </path>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
             </path>
           </annotationProcessorPaths>
         </configuration>
