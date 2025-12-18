@@ -31,6 +31,7 @@ public class Locker {
     @Column(name = "mac_address")
     private String macAddress;
 
+    // FIXME ski resort ni required
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ski_resort_id")
     @JsonBackReference
