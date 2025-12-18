@@ -32,10 +32,6 @@ public class LockerService{
             .orElseThrow(() -> new LockerNotFoundException(mac));
     }
 
-    public List<Lock> getLocks(Integer lockerId) {
-        // TODO implementiraj metodo, ki najde vse Locke za Locker s podanim id-jem
-    }
-
     public Locker create(Locker locker) {
         return lockerRepository.save(locker);
     }
