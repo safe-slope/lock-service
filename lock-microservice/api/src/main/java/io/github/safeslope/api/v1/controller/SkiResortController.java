@@ -17,6 +17,7 @@ import io.github.safeslope.skiresort.service.SkiResortService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,8 +92,11 @@ public class SkiResortController {
 
     @PostMapping
     public ResponseEntity<SkiResortDto> create(@RequestBody SkiResortDto dto) {
-        SkiResort entity = skiResortMapper.toEntity(dto);
-        SkiResort saved = skiResortService.create(entity);
-        return ResponseEntity.ok(skiResortMapper.toDto(saved));
+        SkiResort saved = skiResortService.create(skiResortMapper.toEntity(dto));
+
+        return ResponseEntity
+                .created(URI.create("/api/v1/skiresorts/" + saved.getId()))
+                .body(skiResortMapper.toDto(saved));
     }
+
 }
