@@ -9,6 +9,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public abstract class SkiTicketMapper {
 
@@ -17,8 +19,12 @@ public abstract class SkiTicketMapper {
     @Mapping(target = "skiResortId", source = "skiResort.id")
     public abstract SkiTicketDto toDto(SkiTicket entity);
 
+    public abstract List<SkiTicketDto> toDtoList(List<SkiTicket> entities);
+
     @Mapping(target = "skiResort", ignore = true)
     public abstract SkiTicket toEntity(SkiTicketDto dto);
+
+    public abstract List<SkiTicket> toEntityList(List<SkiTicketDto> dtos);
 
     @AfterMapping
     protected void afterToEntity(SkiTicketDto dto, @MappingTarget SkiTicket entity) {
