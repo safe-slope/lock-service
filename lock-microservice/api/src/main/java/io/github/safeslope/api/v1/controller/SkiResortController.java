@@ -2,6 +2,7 @@ package io.github.safeslope.api.v1.controller;
 
 
 import io.github.safeslope.api.v1.dto.LockDto;
+import io.github.safeslope.api.v1.dto.LockEventDto;
 import io.github.safeslope.api.v1.dto.LockerDto;
 import io.github.safeslope.api.v1.dto.SkiResortDto;
 import io.github.safeslope.entities.SkiResort;
@@ -40,6 +41,11 @@ public class SkiResortController {
 
     @GetMapping("/{id}/locks")
     public List<LockDto> getLocks(@PathVariable Integer id) {
+        // TODO klici metodo v SkiResortService
+    }
+
+    @GetMapping("/{id}/lock-events")
+    public List<LockEventDto> getLockEvents(@PathVariable Integer id) {
         // TODO klici metodo v SkiResortService
     }
 
