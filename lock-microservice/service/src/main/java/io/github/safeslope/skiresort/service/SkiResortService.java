@@ -32,16 +32,6 @@ public class SkiResortService {
         return repo.findByName(name);
     }
 
-    public List<Locker> getLockers(Integer id) {
-        // TODO implementiraj metodo, ki najde vse Lockerje za SkiResort s podanim id-jem
-        return null;
-    }
-
-    public List<Lock> getLocks(Integer id) {
-        // TODO implementiraj metodo, ki najde vse Locke za SkiResort s podanim id-jem
-        return null;
-    }
-
     public SkiResort create(SkiResort resort) {
         return repo.save(resort);
     }
