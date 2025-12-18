@@ -5,8 +5,10 @@ import io.github.safeslope.api.v1.dto.LockDto;
 import io.github.safeslope.api.v1.dto.LockEventDto;
 import io.github.safeslope.api.v1.dto.LockerDto;
 import io.github.safeslope.api.v1.dto.SkiResortDto;
+import io.github.safeslope.api.v1.mapper.LockerMapper;
 import io.github.safeslope.api.v1.mapper.SkiResortMapper;
 import io.github.safeslope.entities.SkiResort;
+import io.github.safeslope.locker.service.LockerService;
 import io.github.safeslope.skiresort.service.SkiResortService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +22,14 @@ public class SkiResortController {
 
     private final SkiResortService skiResortService;
     private final SkiResortMapper skiResortMapper;
+    private final LockerService lockerService;
+    private final LockerMapper lockerMapper;
 
-    public SkiResortController(SkiResortService skiResortService, SkiResortMapper skiResortMapper) {
+    public SkiResortController(SkiResortService skiResortService, SkiResortMapper skiResortMapper, LockerService lockerService, LockerMapper lockerMapper) {
         this.skiResortService = skiResortService;
         this.skiResortMapper = skiResortMapper;
+        this.lockerService = lockerService;
+        this.lockerMapper = lockerMapper;
     }
 
     @GetMapping
@@ -43,8 +49,7 @@ public class SkiResortController {
 
     @GetMapping("/{id}/lockers")
     public List<LockerDto> getLockers(@PathVariable Integer id) {
-        // TODO klici metodo v SkiResortService
-        return null;
+        return lockerMapper.toDtoList(lockerService.getAllBySkiResortId(id));
     }
 
     @GetMapping("/{id}/locks")
