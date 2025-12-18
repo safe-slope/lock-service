@@ -41,5 +41,12 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+
+     <!-- MQTT client for communication w/ Mosquitto broker -->
+    <dependency>
+      <groupId>org.eclipse.paho</groupId>
+      <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+      <version>1.2.5</version>
+    </dependency>
   </dependencies>
 </project>
