@@ -1,6 +1,7 @@
 package io.github.safeslope.api.v1.controller;
 
 import io.github.safeslope.api.v1.dto.LockDto;
+import io.github.safeslope.api.v1.mapper.LockMapper;
 import io.github.safeslope.entities.Lock;
 import io.github.safeslope.lock.service.LockService;
 import org.springframework.http.ResponseEntity;
@@ -14,39 +15,31 @@ import java.util.stream.Collectors;
 public class LockController {
 
     private final LockService lockService;
+    private final LockMapper lockMapper;
 
-    public LockController(LockService lockService) {
+    public LockController(LockService lockService, LockMapper lockMapper) {
         this.lockService = lockService;
+        this.lockMapper = lockMapper;
     }
 
     @GetMapping
     public List<LockDto> list() {
-        return lockService.getAllLocks().stream().map(this::toDto).collect(Collectors.toList());
+        return lockService.getAllLocks().stream().map(lockMapper::toDto).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public LockDto get(@PathVariable Integer id) {
-        return toDto(lockService.getLock(id));
+        return lockMapper.toDto(lockService.getLock(id));
     }
 
     @GetMapping("/mac/{mac}")
     public LockDto getByMac(@PathVariable String mac) {
-        return toDto(lockService.getByMacAddress(mac));
+        return lockMapper.toDto(lockService.getByMacAddress(mac));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         lockService.delete(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private LockDto toDto(Lock l) {
-        return new LockDto(
-                l.getId(),
-                l.getDateAdded(),
-                l.getMacAddress(),
-                l.getLocker() != null ? l.getLocker().getId() : null,
-                l.getLocation() != null ? l.getLocation().getId() : null
-        );
     }
 }
