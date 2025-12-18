@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface LockRepository extends JpaRepository<Lock, Integer> {
     Optional<Lock> findByMacAddress(String macAddress);
     List<Lock> findByLocker_Id(Integer lockerId);
+    List<Lock> findByLocker_SkiResort_Id(Integer skiResortId);
 }
