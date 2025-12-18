@@ -1,7 +1,5 @@
 package io.github.safeslope.skiresort.service;
 
-import io.github.safeslope.entities.Lock;
-import io.github.safeslope.entities.Locker;
 import io.github.safeslope.entities.SkiResort;
 import io.github.safeslope.skiresort.repository.SkiResortRepository;
 import jakarta.transaction.Transactional;

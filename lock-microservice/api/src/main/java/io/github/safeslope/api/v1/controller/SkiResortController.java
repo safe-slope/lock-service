@@ -82,7 +82,7 @@ public class SkiResortController {
         return lockEventMapper.toDtoList(lockEventService.getAllBySkiResort(id));
     }
 
-    @GetMapping("{$id}/ski-tickets")
+    @GetMapping("{id}/ski-tickets")
     public List<SkiTicketDto> getSkiTickets(@PathVariable Integer id) {
         return skiTicketMapper.toDtoList(skiTicketService.getAllBySkiResortId(id));
     }
