@@ -6,9 +6,11 @@ import io.github.safeslope.api.v1.dto.LockEventDto;
 import io.github.safeslope.api.v1.dto.LockerDto;
 import io.github.safeslope.api.v1.dto.SkiResortDto;
 import io.github.safeslope.api.v1.mapper.LockEventMapper;
+import io.github.safeslope.api.v1.mapper.LockMapper;
 import io.github.safeslope.api.v1.mapper.LockerMapper;
 import io.github.safeslope.api.v1.mapper.SkiResortMapper;
 import io.github.safeslope.entities.SkiResort;
+import io.github.safeslope.lock.service.LockService;
 import io.github.safeslope.locker.service.LockerService;
 import io.github.safeslope.lockevent.service.LockEventService;
 import io.github.safeslope.skiresort.service.SkiResortService;
@@ -28,14 +30,18 @@ public class SkiResortController {
     private final LockerMapper lockerMapper;
     private final LockEventService lockEventService;
     private final LockEventMapper lockEventMapper;
+    private final LockService lockService;
+    private final LockMapper lockMapper;
 
-    public SkiResortController(SkiResortService skiResortService, SkiResortMapper skiResortMapper, LockerService lockerService, LockerMapper lockerMapper, LockEventService lockEventService, LockEventMapper lockEventMapper) {
+    public SkiResortController(SkiResortService skiResortService, SkiResortMapper skiResortMapper, LockerService lockerService, LockerMapper lockerMapper, LockEventService lockEventService, LockEventMapper lockEventMapper, LockService lockService, LockMapper lockMapper) {
         this.skiResortService = skiResortService;
         this.skiResortMapper = skiResortMapper;
         this.lockerService = lockerService;
         this.lockerMapper = lockerMapper;
         this.lockEventService = lockEventService;
         this.lockEventMapper = lockEventMapper;
+        this.lockService = lockService;
+        this.lockMapper = lockMapper;
     }
 
     @GetMapping
@@ -60,8 +66,7 @@ public class SkiResortController {
 
     @GetMapping("/{id}/locks")
     public List<LockDto> getLocks(@PathVariable Integer id) {
-        // TODO klici metodo v SkiResortService
-        return null;
+        return lockMapper.toDtoList(lockService.getAllBySkiResortId(id));
     }
 
     @GetMapping("/{id}/lock-events")
