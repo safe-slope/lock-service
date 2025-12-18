@@ -33,7 +33,15 @@ public class SkiResortController {
     private final LockService lockService;
     private final LockMapper lockMapper;
 
-    public SkiResortController(SkiResortService skiResortService, SkiResortMapper skiResortMapper, LockerService lockerService, LockerMapper lockerMapper, LockEventService lockEventService, LockEventMapper lockEventMapper, LockService lockService, LockMapper lockMapper) {
+    public SkiResortController(
+            SkiResortService skiResortService,
+            SkiResortMapper skiResortMapper,
+            LockerService lockerService,
+            LockerMapper lockerMapper,
+            LockEventService lockEventService,
+            LockEventMapper lockEventMapper,
+            LockService lockService,
+            LockMapper lockMapper) {
         this.skiResortService = skiResortService;
         this.skiResortMapper = skiResortMapper;
         this.lockerService = lockerService;
