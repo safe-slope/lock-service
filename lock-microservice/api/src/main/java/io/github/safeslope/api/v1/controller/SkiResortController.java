@@ -5,10 +5,12 @@ import io.github.safeslope.api.v1.dto.LockDto;
 import io.github.safeslope.api.v1.dto.LockEventDto;
 import io.github.safeslope.api.v1.dto.LockerDto;
 import io.github.safeslope.api.v1.dto.SkiResortDto;
+import io.github.safeslope.api.v1.mapper.LockEventMapper;
 import io.github.safeslope.api.v1.mapper.LockerMapper;
 import io.github.safeslope.api.v1.mapper.SkiResortMapper;
 import io.github.safeslope.entities.SkiResort;
 import io.github.safeslope.locker.service.LockerService;
+import io.github.safeslope.lockevent.service.LockEventService;
 import io.github.safeslope.skiresort.service.SkiResortService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +26,16 @@ public class SkiResortController {
     private final SkiResortMapper skiResortMapper;
     private final LockerService lockerService;
     private final LockerMapper lockerMapper;
+    private final LockEventService lockEventService;
+    private final LockEventMapper lockEventMapper;
 
-    public SkiResortController(SkiResortService skiResortService, SkiResortMapper skiResortMapper, LockerService lockerService, LockerMapper lockerMapper) {
+    public SkiResortController(SkiResortService skiResortService, SkiResortMapper skiResortMapper, LockerService lockerService, LockerMapper lockerMapper, LockEventService lockEventService, LockEventMapper lockEventMapper) {
         this.skiResortService = skiResortService;
         this.skiResortMapper = skiResortMapper;
         this.lockerService = lockerService;
         this.lockerMapper = lockerMapper;
+        this.lockEventService = lockEventService;
+        this.lockEventMapper = lockEventMapper;
     }
 
     @GetMapping
@@ -60,8 +66,7 @@ public class SkiResortController {
 
     @GetMapping("/{id}/lock-events")
     public List<LockEventDto> getLockEvents(@PathVariable Integer id) {
-        // TODO klici metodo v SkiResortService
-        return null;
+        return lockEventMapper.toDtoList(lockEventService.getAllBySkiResort(id));
     }
 
 

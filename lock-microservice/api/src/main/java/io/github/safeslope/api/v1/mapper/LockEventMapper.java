@@ -11,6 +11,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public abstract class LockEventMapper {
 
@@ -22,9 +24,13 @@ public abstract class LockEventMapper {
     @Mapping(target = "skiTicketId", source = "skiTicket.id")
     public abstract LockEventDto toDto(LockEvent entity);
 
+    public abstract List<LockEventDto> toDtoList(List<LockEvent> entities);
+
     @Mapping(target = "lock", ignore = true)
     @Mapping(target = "skiTicket", ignore = true)
     public abstract LockEvent toEntity(LockEventDto dto);
+
+    public abstract List<LockEvent> toEntityList(List<LockEventDto> dtos);
 
     @AfterMapping
     protected void afterToEntity(LockEventDto dto, @MappingTarget LockEvent entity) {

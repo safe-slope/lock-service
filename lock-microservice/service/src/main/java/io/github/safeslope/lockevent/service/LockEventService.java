@@ -27,12 +27,16 @@ public class LockEventService {
                 .orElseThrow(() -> new LockEventNotFoundException(id));
     }
 
-    public List<LockEvent> getByLock(Integer lockId) {
-        return repo.findByLockId_IdOrderByEventTimeDesc(lockId);
+    public List<LockEvent> getAllByLock(Integer lockId) {
+        return repo.findByLock_IdOrderByEventTimeDesc(lockId);
     }
 
-    public List<LockEvent> getBySkiTicket(Integer skiTicketId) {
+    public List<LockEvent> getAllBySkiTicket(Integer skiTicketId) {
         return repo.findBySkiTicket_IdOrderByEventTimeDesc(skiTicketId);
+    }
+
+    public List<LockEvent> getAllBySkiResort(Integer skiResortId) {
+        return repo.findBySkiResort_Id(skiResortId);
     }
 
     public LockEvent create(LockEvent event) {
