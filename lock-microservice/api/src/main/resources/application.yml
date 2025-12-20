@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: lock-service
+
+
+mqtt:
+  broker: tcp://mosquitto:1883
+  clientId: lock-service-${random.uuid}
+
+  #za auth na brokerju - dodaj
+  username: ""
+  password: ""
+
+  cleanSession: true
+  qos: 1
+
+  # topics
+  eventsTopic: locks/+/events
+  commandsTopicFormat: locks/%s/cmd
+
+#logiranje
+logging:
+  level:
+    io.github.safeslope.service.mqtt: DEBUG
+    org.eclipse.paho.client.mqttv3: INFO
