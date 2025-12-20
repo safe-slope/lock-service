@@ -1,4 +1,4 @@
-package io.github.safeslope.service.mqtt;
+package io.github.safeslope.mqtt;
 
 import org.eclipse.paho.client.mqttv3.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
