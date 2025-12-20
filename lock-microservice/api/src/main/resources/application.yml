@@ -5,24 +5,22 @@ spring:
   application:
     name: lock-service
 
-
 mqtt:
   broker: tcp://mosquitto:1883
-  clientId: lock-service-${random.uuid}
+  clientId: ${HOSTNAME:lock-service}
+  username: ${MQTT_USERNAME:}
+  password: ${MQTT_PASSWORD:}
 
-  #za auth na brokerju - dodaj
-  username: ""
-  password: ""
-
-  cleanSession: true
+  #broker hrani session (subs + QoS1 backlog) med disconnectom
+  cleanSession: false
   qos: 1
 
   # topics
-  eventsTopic: locks/+/events
-  commandsTopicFormat: locks/%s/cmd
+  eventsTopic: tenants/+/locks/+/events
+  commandsTopicFormat: tenants/%s/locks/%s/cmd
 
 #logiranje
 logging:
   level:
-    io.github.safeslope.service.mqtt: DEBUG
+    io.github.safeslope.mqtt: DEBUG
     org.eclipse.paho.client.mqttv3: INFO
