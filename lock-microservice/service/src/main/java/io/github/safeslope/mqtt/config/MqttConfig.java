@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(MqttProperties.class)
 public class MqttConfig {
 
-    @Bean
+    @Bean(destroyMethod = "close")
     public IMqttAsyncClient mqttClient(MqttProperties props) throws MqttException {
         MqttConnectOptions options = new MqttConnectOptions();
         options.setAutomaticReconnect(true);
@@ -28,12 +28,12 @@ public class MqttConfig {
         client.connect(options, null, new IMqttActionListener() {
             @Override
             public void onSuccess(IMqttToken asyncActionToken) {
-                System.out.println("[MQTT] Connected");
+                log.info("[MQTT] Connected to {}", props.getBroker());
             }
 
             @Override
             public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                System.err.println("[MQTT] Connection failed: " + exception.getMessage());
+                log.error("[MQTT] Connection failed", exception);
             }
         });
 
