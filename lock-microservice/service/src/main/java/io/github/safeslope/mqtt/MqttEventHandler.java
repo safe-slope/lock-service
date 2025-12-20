@@ -37,10 +37,10 @@ public class MqttEventHandler {
             MqttLockEventDto dto = objectMapper.readValue(payload, MqttLockEventDto.class);
 
             // tenant aware
-            Lock lock = lockService.getByTenantAndMac(parts.tenantId(), parts.lockKey());
+           // Lock lock = lockService.getByTenantAndMac(parts.tenantId(), parts.lockKey());
             
            
-             //zacasno: Lock lock = lockService.getByMacAddress(parts.lockKey());
+            Lock lock = lockService.getByMacAddress(parts.lockKey());
 
             LockEvent event = new LockEvent();
             event.setLock(lock);
@@ -48,9 +48,6 @@ public class MqttEventHandler {
             event.setEventTime(parseTsOrNow(dto.ts()));
 
             lockEventService.create(event);
-
-            log.info("LockEvent persisted tenant={} lockId={} type={}",
-                    parts.tenantId(), lock.getId(), event.getEventType());
 
         } catch (Exception e) {
             log.error("Failed handling MQTT event topic={} payload={}", topic, payload, e);

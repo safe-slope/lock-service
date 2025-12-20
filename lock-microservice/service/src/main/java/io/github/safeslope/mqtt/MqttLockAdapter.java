@@ -37,6 +37,10 @@ public class MqttLockAdapter implements MqttCallbackExtended {
     }
 
     @Override
+    public void deliveryComplete(IMqttDeliveryToken token) { }
+
+
+    @Override
     public void connectComplete(boolean reconnect, String serverURI) {
         log.info("MQTT connected (reconnect={}) to {}", reconnect, serverURI);
         try {
