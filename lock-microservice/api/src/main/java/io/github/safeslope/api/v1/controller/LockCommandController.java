@@ -11,4 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/locks")
 public class LockCommandController {
 
+    private final LockCommandService lockCommandService;
+
+    public LockCommandController(LockCommandService lockCommandService) {
+        this.lockCommandService = lockCommandService;
+    }
+
+    @PostMapping("/{id}/commands/unlock")
+    //add
+
+  @PostMapping("/{id}/commands/lock")
+    //add
+
+
 }
