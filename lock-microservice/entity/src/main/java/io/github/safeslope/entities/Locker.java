@@ -31,8 +31,8 @@ public class Locker {
     @Column(name = "mac_address")
     private String macAddress;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ski_resort_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "ski_resort_id", nullable = true)
     @JsonBackReference
     private SkiResort skiResort;
 

@@ -1,8 +1,8 @@
 package io.github.safeslope.locker.service;
 
-import io.github.safeslope.entities.Lock;
 import io.github.safeslope.entities.Locker;
 import io.github.safeslope.locker.repository.LockerRepository;
+import io.github.safeslope.skiresort.service.SkiResortNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +32,11 @@ public class LockerService{
             .orElseThrow(() -> new LockerNotFoundException(mac));
     }
 
-    public List<Lock> getLocks(Integer lockerId) {
-        // TODO implementiraj metodo, ki najde vse Locke za Locker s podanim id-jem
+    public List<Locker> getAllBySkiResortId(Integer skiResortId) {
+        if (!lockerRepository.existsById(skiResortId)) {
+            throw new SkiResortNotFoundException(skiResortId);
+        }
+        return lockerRepository.findBySkiResort_Id(skiResortId);
     }
 
     public Locker create(Locker locker) {

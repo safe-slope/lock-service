@@ -26,7 +26,7 @@ public class LockEvent {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lock_id")
     @JsonBackReference
-    private Lock lockId;
+    private Lock lock;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ski_ticket_id")
@@ -35,7 +35,7 @@ public class LockEvent {
     @Enumerated(EnumType.STRING)
     private EventType eventType;
 
-    private enum EventType {
+    public enum EventType {
         LOCKED,
         UNLOCKED,
         MALFUNCTION

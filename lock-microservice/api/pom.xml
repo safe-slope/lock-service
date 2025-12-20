@@ -21,7 +21,12 @@
     <dependency>
       <groupId>io.github.safeslope</groupId>
       <artifactId>service</artifactId>
-      <version>${project.version}</version>
+    </dependency>
+
+    <!-- Entity module dependency -->
+    <dependency>
+      <groupId>io.github.safeslope</groupId>
+      <artifactId>entity</artifactId>
     </dependency>
 
     <!-- Spring Boot Web (includes Jackson, validation support for REST controllers) -->
@@ -43,6 +48,17 @@
       <scope>provided</scope>
     </dependency>
 
+    <!-- MapStruct (compile) + processor (annotation processing) -->
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct-processor</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
     <!-- Tests -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -53,6 +69,23 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+            </path>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+
       <!-- pluginManagement for version lives in parent; just declare plugin for packaging/run -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
