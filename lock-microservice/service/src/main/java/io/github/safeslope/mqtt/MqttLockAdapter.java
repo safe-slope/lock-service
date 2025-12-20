@@ -46,7 +46,7 @@ public class MqttLockAdapter implements MqttCallbackExtended {
         try {
             subscribeToEvents();
         } catch (MqttException e) {
-            log.error("MQTT subscribe/resubscribe failed", e);
+            log.error("MQTT subscribe failed", e);
         }
     }
 

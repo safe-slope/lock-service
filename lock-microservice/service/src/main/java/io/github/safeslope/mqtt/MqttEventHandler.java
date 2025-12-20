@@ -36,10 +36,6 @@ public class MqttEventHandler {
 
             MqttLockEventDto dto = objectMapper.readValue(payload, MqttLockEventDto.class);
 
-            // tenant aware
-           // Lock lock = lockService.getByTenantAndMac(parts.tenantId(), parts.lockKey());
-            
-           
             Lock lock = lockService.getByMacAddress(parts.lockKey());
 
             LockEvent event = new LockEvent();
