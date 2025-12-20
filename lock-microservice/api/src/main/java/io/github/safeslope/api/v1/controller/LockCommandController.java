@@ -7,21 +7,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController 
+@RestController
 @RequestMapping("/api/v1/locks")
 public class LockCommandController {
 
-    private final LockCommandService lockCommandService;
+  private final LockCommandService lockCommandService;
 
-    public LockCommandController(LockCommandService lockCommandService) {
-        this.lockCommandService = lockCommandService;
-    }
+  public LockCommandController(LockCommandService lockCommandService) {
+    this.lockCommandService = lockCommandService;
+  }
 
-    @PostMapping("/{id}/commands/unlock")
-    //add
+  @PostMapping("/{id}/commands/unlock")
+  public ResponseEntity<Void> unlock(@PathVariable Integer id) {
+    lockCommandService.unlockByLockId(id);
+    return ResponseEntity.accepted().build();
+  }
 
   @PostMapping("/{id}/commands/lock")
-    //add
-
-
+  public ResponseEntity<Void> lock(@PathVariable Integer id) {
+    lockCommandService.lockByLockId(id);
+    return ResponseEntity.accepted().build();
+  }
 }
