@@ -1,7 +1,7 @@
 package io.github.safeslope.lock.service;
 
 import io.github.safeslope.entities.Lock;
-import io.github.safeslope.service.mqtt.MqttLockAdapter;
+import io.github.safeslope.mqtt.MqttLockAdapter;
 import org.springframework.stereotype.Service;
 
 @Service

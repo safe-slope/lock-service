@@ -2,7 +2,9 @@ package io.github.safeslope.lock.service;
 
 import io.github.safeslope.entities.Lock;
 import io.github.safeslope.lock.repository.LockRepository;
+import io.github.safeslope.locker.repository.LockerRepository;
 import io.github.safeslope.locker.service.LockerNotFoundException;
+import io.github.safeslope.skiresort.repository.SkiResortRepository;
 import io.github.safeslope.skiresort.service.SkiResortNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -13,54 +15,58 @@ import java.util.List;
 @Service
 @Transactional
 public class LockService {
-    private final LockRepository repo;
+    private final LockRepository lockRepository;
+    private final LockerRepository lockerRepository;
+    private final SkiResortRepository skiResortRepository;
 
-    public LockService(LockRepository repo) {
-        this.repo = repo;
+    public LockService(LockRepository lockRepository, LockerRepository lockerRepository, SkiResortRepository skiResortRepository) {
+        this.lockRepository = lockRepository;
+        this.lockerRepository = lockerRepository;
+        this.skiResortRepository = skiResortRepository;
     }
 
     public List<Lock> getAllLocks() {
-        return repo.findAll();
+        return lockRepository.findAll();
     }
 
     public Lock getLock(Integer id) {
-        return repo.findById(id)
+        return lockRepository.findById(id)
             .orElseThrow(() -> new LockNotFoundException(id));
     }
 
     public Lock getByMacAddress(String mac) {
-        return repo.findByMacAddress(mac)
+        return lockRepository.findByMacAddress(mac)
             .orElseThrow(() -> new LockNotFoundException(mac));
     }
 
     public Lock create(Lock lock) {
-        return repo.save(lock);
+        return lockRepository.save(lock);
     }
 
     public Lock update(Integer id, Lock lock) {
-        repo.findById(id).orElseThrow(() -> new LockNotFoundException(id));
+        lockRepository.findById(id).orElseThrow(() -> new LockNotFoundException(id));
         lock.setId(id);
-        return repo.save(lock);
+        return lockRepository.save(lock);
     }
 
     public void delete(Integer id) {
-        if (!repo.existsById(id)) {
+        if (!lockRepository.existsById(id)) {
             throw new LockNotFoundException(id);
         }
-        repo.deleteById(id);
+        lockRepository.deleteById(id);
     }
 
     public List<Lock> getAllByLockerId(Integer lockerId) {
-        if (!repo.existsById(lockerId)) {
+        if (!lockerRepository.existsById(lockerId)) {
             throw new LockerNotFoundException(lockerId);
         }
-        return repo.findByLocker_Id(lockerId);
+        return lockRepository.findByLocker_Id(lockerId);
     }
 
     public List<Lock> getAllBySkiResortId(Integer skiResortId){
-        if (!repo.existsById(skiResortId)) {
+        if (!skiResortRepository.existsById(skiResortId)) {
             throw new SkiResortNotFoundException(skiResortId);
         }
-        return repo.findByLocker_SkiResort_Id(skiResortId);
+        return lockRepository.findByLocker_SkiResort_Id(skiResortId);
     }
 }
