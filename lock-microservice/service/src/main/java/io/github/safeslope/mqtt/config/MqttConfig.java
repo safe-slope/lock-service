@@ -1,6 +1,8 @@
-package io.github.safeslope.mqtt;
+package io.github.safeslope.mqtt.config;
 
 import org.eclipse.paho.client.mqttv3.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableConfigurationProperties(MqttProperties.class)
 public class MqttConfig {
+    private static final Logger log = LoggerFactory.getLogger(MqttConfig.class);
+
 
     @Bean(destroyMethod = "close")
     public IMqttAsyncClient mqttClient(MqttProperties props) throws MqttException {

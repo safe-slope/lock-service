@@ -1,5 +1,6 @@
-package io.github.safeslope.service.mqtt;
+package io.github.safeslope.mqtt;
 
+import io.github.safeslope.mqtt.config.MqttProperties;
 import jakarta.annotation.PostConstruct;
 import org.eclipse.paho.client.mqttv3.*;
 import org.slf4j.Logger;

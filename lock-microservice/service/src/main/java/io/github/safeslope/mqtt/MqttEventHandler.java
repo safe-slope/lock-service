@@ -1,4 +1,4 @@
-package io.github.safeslope.service.mqtt;
+package io.github.safeslope.mqtt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.safeslope.entities.Lock;
@@ -6,7 +6,7 @@ import io.github.safeslope.entities.LockEvent;
 import io.github.safeslope.entities.LockEvent.EventType;
 import io.github.safeslope.lock.service.LockService;
 import io.github.safeslope.lockevent.service.LockEventService;
-import io.github.safeslope.service.mqtt.dto.MqttLockEventDto;
+import io.github.safeslope.mqtt.dto.MqttLockEventDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -38,10 +38,11 @@ public class MqttEventHandler {
 
             Lock lock = lockService.getByMacAddress(parts.lockKey());
 
-            LockEvent event = new LockEvent();
-            event.setLock(lock);
-            event.setEventType(parseEventType(dto.type()));
-            event.setEventTime(parseTsOrNow(dto.ts()));
+            LockEvent event = LockEvent.builder()
+                    .lock(lock)
+                    .eventType(parseEventType(dto.type()))
+                    .eventTime(parseTsOrNow(dto.ts()))
+                .build();
 
             lockEventService.create(event);
 
