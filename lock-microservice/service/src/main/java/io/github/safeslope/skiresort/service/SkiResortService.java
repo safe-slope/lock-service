@@ -11,42 +11,42 @@ import java.util.List;
 @Transactional
 public class SkiResortService {
 
-    private final SkiResortRepository repo;
+    private final SkiResortRepository skiResortRepository;
 
-    public SkiResortService(SkiResortRepository repo) {
-        this.repo = repo;
+    public SkiResortService(SkiResortRepository skiResortRepository) {
+        this.skiResortRepository = skiResortRepository;
     }
 
     public List<SkiResort> getAll() {
-        return repo.findAll();
+        return skiResortRepository.findAll();
     }
     public SkiResort get(Integer id) {
-        return repo.findById(id).
+        return skiResortRepository.findById(id).
                 orElseThrow(() -> new SkiResortNotFoundException(id));
     }
 
     public SkiResort getByName(String name) {
         // FIXME potrebna je implementacija izjeme (kot pri get)
-        return repo.findByName(name);
+        return skiResortRepository.findByName(name);
     }
 
     public SkiResort create(SkiResort resort) {
-        return repo.save(resort);
+        return skiResortRepository.save(resort);
     }
 
     public SkiResort update(Integer id, SkiResort updated) {
-        SkiResort existing = repo.findById(id)
+        SkiResort existing = skiResortRepository.findById(id)
             .orElseThrow(() -> new SkiResortNotFoundException(id));
 
         existing.setName(updated.getName());
         existing.setAddress(updated.getAddress());
-        return repo.save(existing);
+        return skiResortRepository.save(existing);
     }
 
     public void delete(Integer id) {
-        if (!repo.existsById(id)) {
+        if (!skiResortRepository.existsById(id)) {
             throw new SkiResortNotFoundException(id);
         }
-        repo.deleteById(id);
+        skiResortRepository.deleteById(id);
     }
 }
