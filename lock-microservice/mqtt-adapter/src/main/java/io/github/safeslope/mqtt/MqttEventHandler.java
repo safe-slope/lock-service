@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.*;
+import java.time.LocalDateTime;
 
 @Service
 public class MqttEventHandler {
@@ -40,9 +40,9 @@ public class MqttEventHandler {
 
             LockEvent event = LockEvent.builder()
                     .lock(lock)
-                    .eventType(parseEventType(dto.type()))
-                    .eventTime(parseTsOrNow(dto.ts()))
-                .build();
+                    .eventType(parseEventType(dto.getType()))
+                    .eventTime(parseTsOrNow(dto.getTs()))
+                    .build();
 
             lockEventService.create(event);
 
@@ -54,20 +54,31 @@ public class MqttEventHandler {
     // Expected: tenants/{tenantId}/locks/{lockKey}/events
     private TopicParts parseTopic(String topic) {
         String[] p = topic.split("/");
+
+        if (p.length < 5) {
+            throw new IllegalArgumentException("Unexpected topic format: " + topic);
+        }
+
         String tenantId = p[1];
         String lockKey = p[3];
-      
+
         return new TopicParts(tenantId, lockKey);
     }
 
     private EventType parseEventType(String type) {
+        if (type == null || type.isBlank()) {
+            throw new IllegalArgumentException("Missing event type");
+        }
         return EventType.valueOf(type.trim().toUpperCase());
     }
 
     private LocalDateTime parseTsOrNow(String ts) {
         if (ts == null || ts.isBlank()) return LocalDateTime.now();
-        try { return LocalDateTime.parse(ts); } catch (Exception ignored) {}
-        return LocalDateTime.now();
+        try {
+            return LocalDateTime.parse(ts);
+        } catch (Exception ignored) {
+            return LocalDateTime.now();
+        }
     }
 
     private record TopicParts(String tenantId, String lockKey) {}

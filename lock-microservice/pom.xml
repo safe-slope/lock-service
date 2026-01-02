@@ -16,6 +16,7 @@
     <module>entity</module>
     <module>service</module>
     <module>api</module>
+    <module>mqtt-adapter</module>
   </modules>
 
   <properties>

@@ -1,35 +1,40 @@
 package io.github.safeslope.lock.service;
 
 import io.github.safeslope.entities.Lock;
-import io.github.safeslope.mqtt.MqttLockAdapter;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LockCommandService {
 
     private final LockService lockService;
-    private final MqttLockAdapter mqtt;
 
-    public LockCommandService(LockService lockService, MqttLockAdapter mqtt) {
+    public LockCommandService(LockService lockService) {
         this.lockService = lockService;
-        this.mqtt = mqtt;
+    }
+
+
+    public void unlockByLockId(Integer lockId) {
+        unlock(lockId);
+    }
+
+
+    public void lockByLockId(Integer lockId) {
+        lock(lockId);
     }
 
     public void unlock(Integer lockId) {
         Lock lock = lockService.getLock(lockId);
-
-        String tenantId = lock.getLocker().getSkiResort().getId().toString(); 
+        String tenantId = lock.getLocker().getSkiResort().getId().toString();
         String lockKey = lock.getMacAddress();
 
-        mqtt.sendCommand(tenantId, lockKey, "{\"cmd\":\"UNLOCK\"}");
+        // TODO: mqtt-adapter publish UNLOCK
     }
 
     public void lock(Integer lockId) {
         Lock lock = lockService.getLock(lockId);
-
         String tenantId = lock.getLocker().getSkiResort().getId().toString();
         String lockKey = lock.getMacAddress();
 
-        mqtt.sendCommand(tenantId, lockKey, "{\"cmd\":\"LOCK\"}");
+        // TODO: mqtt-adapter publish LOCK
     }
 }
