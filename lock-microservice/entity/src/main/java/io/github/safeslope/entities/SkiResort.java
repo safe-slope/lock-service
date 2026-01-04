@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @ToString(exclude = {"lockers", "skiTickets"})
 public class SkiResort {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //without generation type, IDs are set externally
     private Integer id;
 
     @Column(name = "name")
