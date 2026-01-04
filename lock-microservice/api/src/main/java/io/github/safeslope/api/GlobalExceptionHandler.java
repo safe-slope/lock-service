@@ -11,8 +11,8 @@ public class GlobalExceptionHandler {
             io.github.safeslope.lock.service.LockNotFoundException.class,
             io.github.safeslope.locker.service.LockerNotFoundException.class,
             io.github.safeslope.location.service.LocationNotFoundException.class,
-//            io.github.safeslope.skiresort.service.SkiResortNotFoundException.class,
-//            io.github.safeslope.skiticket.service.SkiTicketNotFoundException.class,
+            io.github.safeslope.skiresort.service.SkiResortNotFoundException.class,
+            io.github.safeslope.skiticket.service.SkiTicketNotFoundException.class,
             io.github.safeslope.lockevent.service.LockEventNotFoundException.class
     })
     public ResponseEntity<String> handleNotFound(RuntimeException ex) {
