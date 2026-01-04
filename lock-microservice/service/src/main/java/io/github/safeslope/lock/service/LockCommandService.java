@@ -19,7 +19,7 @@ public class LockCommandService {
     public void unlock(Integer lockId) throws MqttException {
         Lock lock = lockService.getLock(lockId);
 
-        String tenantId = lock.getLocker().getSkiResort().getTenantId();
+        String tenantId = lock.getLocker().getSkiResort().getId().toString();;
         String lockKey = lock.getMacAddress();
 
         mqtt.sendCommand(tenantId, lockKey, "{\"cmd\":\"UNLOCK\"}");
@@ -28,7 +28,7 @@ public class LockCommandService {
     public void lock(Integer lockId) throws MqttException {
         Lock lock = lockService.getLock(lockId);
 
-        String tenantId = lock.getLocker().getSkiResort().getTenantId();
+        String tenantId = lock.getLocker().getSkiResort().getId().toString();;
         String lockKey = lock.getMacAddress();
 
         mqtt.sendCommand(tenantId, lockKey, "{\"cmd\":\"LOCK\"}");
