@@ -12,6 +12,8 @@ import jakarta.validation.constraints.NotBlank;
 public class SkiResortDto {
     private Integer id;
 
+    private String tenantId;
+
     @NotBlank
     private String name;
 
