@@ -38,6 +38,7 @@ public class SkiResortService {
         SkiResort existing = skiResortRepository.findById(id)
             .orElseThrow(() -> new SkiResortNotFoundException(id));
 
+        existing.setTenantId(updated.getTenantId());
         existing.setName(updated.getName());
         existing.setAddress(updated.getAddress());
         return skiResortRepository.save(existing);

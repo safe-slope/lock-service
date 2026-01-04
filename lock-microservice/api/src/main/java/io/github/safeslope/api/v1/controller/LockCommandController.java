@@ -1,6 +1,7 @@
 package io.github.safeslope.api.v1.controller;
 
 import io.github.safeslope.lock.service.LockCommandService;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,14 +19,14 @@ public class LockCommandController {
   }
 
   @PostMapping("/{id}/commands/unlock")
-  public ResponseEntity<Void> unlock(@PathVariable Integer id) {
-    lockCommandService.unlockByLockId(id);
+  public ResponseEntity<Void> unlock(@PathVariable Integer id) throws MqttException {
+    lockCommandService.unlock(id);
     return ResponseEntity.accepted().build();
   }
 
   @PostMapping("/{id}/commands/lock")
-  public ResponseEntity<Void> lock(@PathVariable Integer id) {
-    lockCommandService.lockByLockId(id);
+  public ResponseEntity<Void> lock(@PathVariable Integer id) throws MqttException {
+    lockCommandService.lock(id);
     return ResponseEntity.accepted().build();
   }
 }

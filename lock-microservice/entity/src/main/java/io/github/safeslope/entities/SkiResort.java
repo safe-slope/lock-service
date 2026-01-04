@@ -20,6 +20,9 @@ public class SkiResort {
     //without generation type, IDs are set externally
     private Integer id;
 
+    @Column(name = "tenant_id")
+    private String tenantId;
+
     @Column(name = "name")
     private String name;
 
