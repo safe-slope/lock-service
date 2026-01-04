@@ -30,6 +30,10 @@ public class SkiResortService {
         return skiResortRepository.findByName(name);
     }
 
+    public List<SkiResort> getByTenantId(String tenantId) {
+        return skiResortRepository.findSkiResortsByTenantId(tenantId);
+    }
+
     public SkiResort create(SkiResort resort) {
         return skiResortRepository.save(resort);
     }
