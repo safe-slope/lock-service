@@ -20,7 +20,7 @@ public class TenantController {
     }
 
     @GetMapping("/{id}/ski-resorts")
-    public List<SkiResortDto> getSkiResorts(@PathVariable String id) {
+    public List<SkiResortDto> getSkiResorts(@PathVariable Integer id) {
         return skiResortMapper.toDtoList(skiResortService.getByTenantId(id));
     }
 }

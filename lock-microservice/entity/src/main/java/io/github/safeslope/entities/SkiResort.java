@@ -21,7 +21,7 @@ public class SkiResort {
     private Integer id;
 
     @Column(name = "tenant_id")
-    private String tenantId;
+    private Integer tenantId;
 
     @Column(name = "name")
     private String name;

@@ -30,7 +30,7 @@ public class SkiResortService {
         return skiResortRepository.findByName(name);
     }
 
-    public List<SkiResort> getByTenantId(String tenantId) {
+    public List<SkiResort> getByTenantId(Integer tenantId) {
         return skiResortRepository.findSkiResortsByTenantId(tenantId);
     }
 

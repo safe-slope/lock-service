@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotBlank;
 public class SkiResortDto {
     private Integer id;
 
-    private String tenantId;
+    private Integer tenantId;
 
     @NotBlank
     private String name;

@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface SkiResortRepository extends JpaRepository<SkiResort, Integer> {
      SkiResort findByName(String name);
 
-     List<SkiResort> findSkiResortsByTenantId(String tenantId);
+     List<SkiResort> findSkiResortsByTenantId(Integer tenantId);
 }
