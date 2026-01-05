@@ -22,7 +22,11 @@ public class LockCommandService {
         String tenantId = lock.getLocker().getSkiResort().getId().toString();;
         String lockKey = lock.getMacAddress();
 
-        mqtt.sendCommand(tenantId, lockKey, "{\"cmd\":\"UNLOCK\"}");
+        try {
+            mqtt.sendCommand(tenantId, lockKey, "{\"cmd\":\"UNLOCK\"}");
+        } catch (MqttException e) {
+            throw new RuntimeException("Failed sending UNLOCK command via MQTT", e);
+        }
     }
 
     public void lock(Integer lockId) throws MqttException {
@@ -31,6 +35,10 @@ public class LockCommandService {
         String tenantId = lock.getLocker().getSkiResort().getId().toString();;
         String lockKey = lock.getMacAddress();
 
-        mqtt.sendCommand(tenantId, lockKey, "{\"cmd\":\"LOCK\"}");
+        try {
+            mqtt.sendCommand(tenantId, lockKey, "{\"cmd\":\"LOCK\"}");
+        } catch (MqttException e) {
+            throw new RuntimeException("Failed sending LOCK command via MQTT", e);
+        }
     }
 }
