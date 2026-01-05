@@ -16,17 +16,10 @@ public class LockCommandService {
         this.mqtt = mqtt;
     }
 
-    public void unlockByLockId(Integer lockId) {
-        unlock(lockId);
-    }
-
-    public void lockByLockId(Integer lockId) {
-        lock(lockId);
-    }
-
-    public void unlock(Integer lockId) {
+    public void unlock(Integer lockId) throws MqttException {
         Lock lock = lockService.getLock(lockId);
-        String tenantId = lock.getLocker().getSkiResort().getId().toString();
+
+        String tenantId = lock.getLocker().getSkiResort().getId().toString();;
         String lockKey = lock.getMacAddress();
 
         try {
@@ -36,9 +29,10 @@ public class LockCommandService {
         }
     }
 
-    public void lock(Integer lockId) {
+    public void lock(Integer lockId) throws MqttException {
         Lock lock = lockService.getLock(lockId);
-        String tenantId = lock.getLocker().getSkiResort().getId().toString();
+
+        String tenantId = lock.getLocker().getSkiResort().getId().toString();;
         String lockKey = lock.getMacAddress();
 
         try {

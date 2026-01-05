@@ -30,6 +30,10 @@ public class SkiResortService {
         return skiResortRepository.findByName(name);
     }
 
+    public List<SkiResort> getByTenantId(Integer tenantId) {
+        return skiResortRepository.findSkiResortsByTenantId(tenantId);
+    }
+
     public SkiResort create(SkiResort resort) {
         return skiResortRepository.save(resort);
     }
@@ -38,6 +42,7 @@ public class SkiResortService {
         SkiResort existing = skiResortRepository.findById(id)
             .orElseThrow(() -> new SkiResortNotFoundException(id));
 
+        existing.setTenantId(updated.getTenantId());
         existing.setName(updated.getName());
         existing.setAddress(updated.getAddress());
         return skiResortRepository.save(existing);
