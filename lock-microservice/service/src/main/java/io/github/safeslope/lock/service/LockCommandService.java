@@ -3,7 +3,6 @@ package io.github.safeslope.lock.service;
 import io.github.safeslope.entities.Lock;
 import io.github.safeslope.entities.SkiResort;
 import io.github.safeslope.mqtt.MqttLockAdapter;
-import io.github.safeslope.skiresort.service.SkiResortService;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 public class LockCommandService {
 
     private final LockService lockService;
-    private final SkiResortService skiResortService;
     private final MqttLockAdapter mqtt;
 
     public LockCommandService(LockService lockService, MqttLockAdapter mqtt) {
