@@ -18,15 +18,15 @@ public class LockCommandController {
     this.lockCommandService = lockCommandService;
   }
 
-  @PostMapping("/{id}/commands/unlock")
-  public ResponseEntity<Void> unlock(@PathVariable Integer id) throws MqttException {
-    lockCommandService.unlock(id);
+  @PostMapping("/{mac}/unlock")
+  public ResponseEntity<Void> unlock(@PathVariable String mac) throws MqttException {
+    lockCommandService.unlock(mac);
     return ResponseEntity.accepted().build();
   }
 
-  @PostMapping("/{id}/commands/lock")
-  public ResponseEntity<Void> lock(@PathVariable Integer id) throws MqttException {
-    lockCommandService.lock(id);
+  @PostMapping("/{mac}/lock")
+  public ResponseEntity<Void> lock(@PathVariable Integer mac) throws MqttException {
+    lockCommandService.lock(mac);
     return ResponseEntity.accepted().build();
   }
 }

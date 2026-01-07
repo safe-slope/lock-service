@@ -1,7 +1,9 @@
 package io.github.safeslope.lock.service;
 
 import io.github.safeslope.entities.Lock;
+import io.github.safeslope.entities.SkiResort;
 import io.github.safeslope.mqtt.MqttLockAdapter;
+import io.github.safeslope.skiresort.service.SkiResortService;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class LockCommandService {
 
     private final LockService lockService;
+    private final SkiResortService skiResortService;
     private final MqttLockAdapter mqtt;
 
     public LockCommandService(LockService lockService, MqttLockAdapter mqtt) {
@@ -16,10 +19,18 @@ public class LockCommandService {
         this.mqtt = mqtt;
     }
 
-    public void unlock(Integer lockId) throws MqttException {
-        Lock lock = lockService.getLock(lockId);
+    public void unlock(String mac) throws MqttException {
+        // iz MAC dobi id ključavnice, tenant ID
+        //      preveri če obstaja, če ne jih temu primerno ustvari (nedodeljen locker in lock z dodeljenim lockerjem)
+        // preveri trenutno stanje ključavnice
+        // pokliči anti-abuse
+        // pokliči skicard-verification
+        // dodaj nov lock-event v bazo
+        // pošlji ukaz nazaj ključavnici
 
-        String tenantId = lock.getLocker().getSkiResort().getId().toString();;
+        Lock lock = lockService.getByMacAddress(mac);
+        SkiResort skiResort = lock.getLocker().getSkiResort();
+        Integer tenantId = skiResort.getTenantId();
         String lockKey = lock.getMacAddress();
 
         try {
@@ -29,10 +40,18 @@ public class LockCommandService {
         }
     }
 
-    public void lock(Integer lockId) throws MqttException {
-        Lock lock = lockService.getLock(lockId);
+    public void lock(String mac) throws MqttException {
+        // iz MAC dobi id ključavnice, tenant ID
+        //      preveri če obstaja, če ne jih temu primerno ustvari (nedodeljen locker in lock z dodeljenim lockerjem)
+        // preveri trenutno stanje ključavnice
+        // pokliči anti-abuse
+        // pokliči skicard-verification
+        // dodaj nov lock-event v bazo
+        // pošlji ukaz nazaj ključavnici
 
-        String tenantId = lock.getLocker().getSkiResort().getId().toString();;
+        Lock lock = lockService.getByMacAddress(mac);
+        SkiResort skiResort = lock.getLocker().getSkiResort();
+        Integer tenantId = skiResort.getTenantId();
         String lockKey = lock.getMacAddress();
 
         try {

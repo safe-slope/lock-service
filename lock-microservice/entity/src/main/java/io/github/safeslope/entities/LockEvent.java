@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"lockId"})
 public class LockEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
