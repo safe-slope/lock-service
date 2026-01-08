@@ -4,7 +4,6 @@ import io.github.safeslope.entities.Locker;
 import io.github.safeslope.locker.repository.LockerRepository;
 import io.github.safeslope.skiresort.repository.SkiResortRepository;
 import io.github.safeslope.skiresort.service.SkiResortNotFoundException;
-import io.github.safeslope.skiresort.service.SkiResortService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -31,9 +30,18 @@ public class LockerService{
             .orElseThrow(() -> new LockerNotFoundException(id));
     }
 
+    public List<Locker> getAllUnassigned() {
+        //returns all lockers without ski resort specified
+        return lockerRepository.findBySkiResortIsNull();
+    }
+
     public Locker getByMacAddress(String mac) {
-        return lockerRepository.findByMacAddress(mac)
-            .orElseThrow(() -> new LockerNotFoundException(mac));
+        Locker locker = lockerRepository.findByMacAddress(mac);
+
+        if (locker == null) {
+            throw new LockerNotFoundException(mac);
+        }
+        return locker;
     }
 
     public List<Locker> getAllBySkiResortId(Integer skiResortId) {
@@ -52,6 +60,22 @@ public class LockerService{
             .orElseThrow(() -> new LockerNotFoundException(id));
         locker.setId(id);
         return lockerRepository.save(locker);
+    }
+
+    public Locker register(String mac) {
+        //first check if the locker with specified mac address exists
+        if (lockerRepository.findByMacAddress(mac) != null) {
+            // return the existing locker
+            return lockerRepository.findByMacAddress(mac);
+        }
+        //else create a locker with the ski resort non specified
+        else {
+            Locker l = Locker.builder()
+                    .macAddress(mac)
+                    .build();
+
+            return lockerRepository.save(l);
+        }
     }
 
     public void delete(Integer id) {

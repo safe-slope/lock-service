@@ -4,6 +4,7 @@ import io.github.safeslope.api.v1.dto.LockDto;
 import io.github.safeslope.api.v1.dto.LockerDto;
 import io.github.safeslope.api.v1.mapper.LockMapper;
 import io.github.safeslope.api.v1.mapper.LockerMapper;
+import io.github.safeslope.entities.Locker;
 import io.github.safeslope.lock.service.LockService;
 import io.github.safeslope.locker.service.LockerService;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,11 @@ public class LockerController {
     @PutMapping("/{id}")
     public LockerDto update(@PathVariable Integer id, @RequestBody LockerDto dto) {
         return lockerMapper.toDto(lockerService.update(id, lockerMapper.toEntity(dto)));
+    }
+
+    @GetMapping("/unassgined")
+    public List<LockerDto> getUnassigned() {
+        return lockerMapper.toDtoList(lockerService.getAllUnassigned());
     }
 
     @GetMapping("/mac/{mac}")
