@@ -9,8 +9,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CommandDto {
     private Integer msgId;
-    private String command;
+    private Command command;
     private Integer lockerId;
     private Integer lockId;
     private LocalDateTime timestamp;
+
+    private enum Command {
+        LOCK,
+        UNLOCK,
+        SET_MODE_TO_NORMAL,
+        SET_MODE_TO_SERVICE,
+        SET_MODE_TO_MAINTENANCE,
+        SET_MODE_TO_DISABLED,
+    }
 }
