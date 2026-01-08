@@ -24,6 +24,12 @@
       <artifactId>entity</artifactId>
     </dependency>
 
+    <!--services-->
+    <dependency>
+      <groupId>io.github.safeslope</groupId>
+      <artifactId>service</artifactId>
+    </dependency>
+
     <!-- Spring Core/Context-->
     <dependency>
       <groupId>org.springframework</groupId>
