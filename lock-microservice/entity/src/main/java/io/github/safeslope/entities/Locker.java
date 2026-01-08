@@ -25,14 +25,14 @@ public class Locker {
     private Integer id;
 
     @CreationTimestamp
-    @Column(name = "date_added", columnDefinition = "TIMESTAMP", updatable = false)
+    @Column(columnDefinition = "TIMESTAMP", updatable = false)
     private LocalDateTime dateAdded;
 
-    @Column(name = "mac_address")
+    @Column()
     private String macAddress;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "ski_resort_id", nullable = true)
+    @JoinColumn()
     @JsonBackReference
     private SkiResort skiResort;
 

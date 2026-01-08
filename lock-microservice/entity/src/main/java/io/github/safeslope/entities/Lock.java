@@ -20,19 +20,38 @@ public class Lock {
     private Integer id;
 
     @CreationTimestamp
-    @Column(name = "date_added", updatable = false)
+    @Column(columnDefinition = "TIMESTAMP", updatable = false)
     private LocalDateTime dateAdded;
 
-    @Column(name = "mac_address", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String macAddress;
 
+    @Column(nullable = false)
+    private State state;
+
+    @Column(nullable = false)
+    private Mode mode;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "locker_id")
+    @JoinColumn()
     @JsonBackReference
     private Locker locker;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id")
+    @JoinColumn()
     @JsonBackReference
     private Location location;
+
+
+    public enum State {
+        LOCKED,
+        UNLOCKED,
+        UNKNOWN
+    }
+
+    public enum Mode {
+        NORMAL,
+        SERVICE,
+        MAINTENANCE
+    }
 }

@@ -1,5 +1,6 @@
 package io.github.safeslope.api.v1.dto;
 
+import io.github.safeslope.entities.Lock;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,10 @@ public class LockDto {
 
     @NotBlank
     private String macAddress;
+
+    private Lock.State state;
+
+    private Lock.Mode mode;
 
     @NotNull
     private Integer lockerId;
