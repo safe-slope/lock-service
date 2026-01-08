@@ -16,8 +16,8 @@ mqtt:
   qos: 1
 
   # topics
-  eventsTopic: tenants/+/locks/+/events
-  commandsTopicFormat: tenants/%s/locks/%s/cmd
+  eventsTopic: tenant/+/resort/+/locker/+/events
+  commandsTopicFormat: tenant/%s/resort/%s/locker/%s/cmd
 
 #logiranje
 logging:

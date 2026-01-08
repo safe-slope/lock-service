@@ -25,7 +25,7 @@ public class MqttEventHandler {
 
             MqttMessage dto = objectMapper.readValue(payload, MqttMessage.class);
 
-            domainHandler.onLockEvent(parts.tenantId(), parts.lockKey(), dto);
+            domainHandler.onLockEvent(parts.tenantId(), parts.resortId(), parts.lockerId(), dto);
 
         } catch (Exception e) {
             log.error("Failed handling MQTT event topic={} payload={}", topic, payload, e);
@@ -34,9 +34,9 @@ public class MqttEventHandler {
 
     private TopicParts parseTopic(String topic) {
         String[] p = topic.split("/");
-        if (p.length < 5) throw new IllegalArgumentException("Unexpected topic: " + topic);
-        return new TopicParts(p[1], p[3]);
+        if (p.length < 7) throw new IllegalArgumentException("Unexpected topic: " + topic);
+        return new TopicParts(p[1], p[3], p[5]);
     }
 
-    private record TopicParts(String tenantId, String lockKey) {}
+    private record TopicParts(String tenantId, String resortId, String lockerId) {}
 }
