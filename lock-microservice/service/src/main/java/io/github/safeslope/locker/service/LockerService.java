@@ -63,10 +63,12 @@ public class LockerService{
     }
 
     public Locker register(String mac) {
+        Locker locker = lockerRepository.findByMacAddress(mac);
+
         //first check if the locker with specified mac address exists
-        if (lockerRepository.findByMacAddress(mac) != null) {
+        if (locker != null) {
             // return the existing locker
-            return lockerRepository.findByMacAddress(mac);
+            return locker;
         }
         //else create a locker with the ski resort non specified
         else {

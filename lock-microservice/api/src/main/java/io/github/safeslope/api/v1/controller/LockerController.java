@@ -2,6 +2,8 @@ package io.github.safeslope.api.v1.controller;
 
 import io.github.safeslope.api.v1.dto.LockDto;
 import io.github.safeslope.api.v1.dto.LockerDto;
+import io.github.safeslope.api.v1.dto.LockerRegisterDto;
+import io.github.safeslope.api.v1.dto.LockerRegisterResponseDto;
 import io.github.safeslope.api.v1.mapper.LockMapper;
 import io.github.safeslope.api.v1.mapper.LockerMapper;
 import io.github.safeslope.entities.Locker;
@@ -48,6 +50,17 @@ public class LockerController {
     @GetMapping("/unassgined")
     public List<LockerDto> getUnassigned() {
         return lockerMapper.toDtoList(lockerService.getAllUnassigned());
+    }
+
+    @GetMapping("/register")
+    public LockerRegisterResponseDto register(@RequestBody LockerRegisterDto dto) {
+        Locker locker = lockerService.register(dto.getMacAddress());
+
+        return new LockerRegisterResponseDto(
+                locker.getId(),
+                locker.getSkiResort().getId(),
+                locker.getSkiResort().getTenantId()
+        );
     }
 
     @GetMapping("/mac/{mac}")
