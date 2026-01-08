@@ -52,6 +52,7 @@ public class Lock {
     public enum Mode {
         NORMAL,
         SERVICE,
-        MAINTENANCE
+        MAINTENANCE,
+        DISABLED
     }
 }

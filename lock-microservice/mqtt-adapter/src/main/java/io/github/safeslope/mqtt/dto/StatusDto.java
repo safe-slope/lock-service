@@ -14,10 +14,6 @@ public class StatusDto {
     private Integer lockId;
     private LocalDateTime timestamp;
     private Lock.State state;
-    private Status status;
     private Lock.Mode mode;
-
-    public enum Status {
-        SUCCESS, FAILURE
-    }
+    private DtoConstants.Status status;
 }

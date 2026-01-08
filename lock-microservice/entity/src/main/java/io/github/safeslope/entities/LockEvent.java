@@ -38,7 +38,6 @@ public class LockEvent {
         LOCKED,
         UNLOCKED,
         ACTION_FAILED,
-        HARDWARE_FAULT,
         COMMUNICATION_ERROR,
         MODE_CHANGED,
         LOCK_DISABLED,

@@ -12,6 +12,6 @@ public class RequestDto {
     private Integer lockerId;
     private Integer lockId;
     private Integer skiTicketId;
-    private String command;
+    private DtoConstants.Command command;
     private LocalDateTime timestamp;
 }
