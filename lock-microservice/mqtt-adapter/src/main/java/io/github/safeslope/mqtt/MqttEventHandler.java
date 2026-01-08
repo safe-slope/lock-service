@@ -34,8 +34,14 @@ public class MqttEventHandler {
 
     private TopicParts parseTopic(String topic) {
         String[] p = topic.split("/");
-        if (p.length < 7) throw new IllegalArgumentException("Unexpected topic: " + topic);
-        return new TopicParts(p[1], p[3], p[5]);
+        if (p.length != 7) throw new IllegalArgumentException("Unexpected topic: " + topic);
+        
+        // Topic format: tenant/{tenantId}/resort/{resortId}/locker/{lockerId}/events
+        final int TENANT_INDEX = 1;
+        final int RESORT_INDEX = 3;
+        final int LOCKER_INDEX = 5;
+        
+        return new TopicParts(p[TENANT_INDEX], p[RESORT_INDEX], p[LOCKER_INDEX]);
     }
 
     private record TopicParts(String tenantId, String resortId, String lockerId) {}
