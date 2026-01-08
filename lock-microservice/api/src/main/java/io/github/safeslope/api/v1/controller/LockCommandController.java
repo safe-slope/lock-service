@@ -25,7 +25,7 @@ public class LockCommandController {
   }
 
   @PostMapping("/{mac}/lock")
-  public ResponseEntity<Void> lock(@PathVariable Integer mac) throws MqttException {
+  public ResponseEntity<Void> lock(@PathVariable String mac) throws MqttException {
     lockCommandService.lock(mac);
     return ResponseEntity.accepted().build();
   }
