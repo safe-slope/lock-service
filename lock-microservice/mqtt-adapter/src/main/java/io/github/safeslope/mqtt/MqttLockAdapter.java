@@ -71,8 +71,8 @@ public class MqttLockAdapter implements MqttCallbackExtended {
     }
 
     // backend -> lock
-    public void sendCommand(Integer tenantId, String lockKey, String jsonPayload) throws MqttException {
-        String topic = String.format(props.getCommandsTopicFormat(), tenantId, lockKey);
+    public void sendCommand(Integer tenantId, Integer resortId, Integer lockerId, String jsonPayload) throws MqttException {
+        String topic = String.format(props.getCommandsTopicFormat(), tenantId, resortId, lockerId);
 
         MqttMessage msg = new MqttMessage(jsonPayload.getBytes(StandardCharsets.UTF_8));
         msg.setQos(props.getQos());
