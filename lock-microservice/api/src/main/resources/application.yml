@@ -15,10 +15,6 @@ mqtt:
   cleanSession: false
   qos: 1
 
-  # topics
-  eventsTopic: tenant/+/resort/+/locker/+/events
-  commandsTopicFormat: tenant/%s/resort/%s/locker/%s/cmd
-
 #logiranje
 logging:
   level:
