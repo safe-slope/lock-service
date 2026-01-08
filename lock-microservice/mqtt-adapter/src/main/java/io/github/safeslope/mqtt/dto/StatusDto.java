@@ -1,5 +1,6 @@
 package io.github.safeslope.mqtt.dto;
 
+import io.github.safeslope.entities.Lock;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -12,7 +13,11 @@ public class StatusDto {
     private Integer lockerId;
     private Integer lockId;
     private LocalDateTime timestamp;
-    private String state;
-    private String status;
-    private String mode;
+    private Lock.State state;
+    private Status status;
+    private Lock.Mode mode;
+
+    public enum Status {
+        SUCCESS, FAILURE
+    }
 }
