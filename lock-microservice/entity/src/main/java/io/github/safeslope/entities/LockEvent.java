@@ -35,12 +35,13 @@ public class LockEvent {
     private EventType eventType;
 
     public enum EventType {
-        LOCKED,
-        UNLOCKED,
+        LOCK,
+        UNLOCK,
         ACTION_FAILED,
         COMMUNICATION_ERROR,
-        MODE_CHANGED,
-        LOCK_DISABLED,
-        LOCK_ENABLED
+        SET_MODE_TO_NORMAL,
+        SET_MODE_TO_SERVICE,
+        SET_MODE_TO_MAINTENANCE,
+        SET_MODE_TO_DISABLED,
     }
 }
