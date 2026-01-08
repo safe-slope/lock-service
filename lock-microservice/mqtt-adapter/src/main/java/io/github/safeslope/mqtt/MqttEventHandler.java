@@ -1,7 +1,7 @@
 package io.github.safeslope.mqtt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.safeslope.mqtt.dto.MqttLockEventDto;
+import io.github.safeslope.mqtt.dto.MqttMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class MqttEventHandler {
         try {
             TopicParts parts = parseTopic(topic);
 
-            MqttLockEventDto dto = objectMapper.readValue(payload, MqttLockEventDto.class);
+            MqttMessage dto = objectMapper.readValue(payload, MqttMessage.class);
 
             domainHandler.onLockEvent(parts.tenantId(), parts.lockKey(), dto);
 
