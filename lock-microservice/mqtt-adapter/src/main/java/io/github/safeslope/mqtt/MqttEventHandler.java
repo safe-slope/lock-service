@@ -10,6 +10,12 @@ import org.springframework.stereotype.Service;
 public class MqttEventHandler {
 
     private static final Logger log = LoggerFactory.getLogger(MqttEventHandler.class);
+    
+    // Topic format: tenant/{tenantId}/resort/{resortId}/locker/{lockerId}/events
+    private static final int EXPECTED_TOPIC_PARTS = 7;
+    private static final int TENANT_INDEX = 1;
+    private static final int RESORT_INDEX = 3;
+    private static final int LOCKER_INDEX = 5;
 
     private final ObjectMapper objectMapper;
     private final MqttDomainHandler domainHandler;
@@ -34,13 +40,9 @@ public class MqttEventHandler {
 
     private TopicParts parseTopic(String topic) {
         String[] p = topic.split("/");
-        if (p.length != 7) throw new IllegalArgumentException("Unexpected topic: " + topic);
-        
-        // Topic format: tenant/{tenantId}/resort/{resortId}/locker/{lockerId}/events
-        final int TENANT_INDEX = 1;
-        final int RESORT_INDEX = 3;
-        final int LOCKER_INDEX = 5;
-        
+        if (p.length != EXPECTED_TOPIC_PARTS) {
+            throw new IllegalArgumentException("Unexpected topic: " + topic);
+        }
         return new TopicParts(p[TENANT_INDEX], p[RESORT_INDEX], p[LOCKER_INDEX]);
     }
 
