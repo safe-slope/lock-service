@@ -2,8 +2,8 @@ package io.github.safeslope.api.v1.controller;
 
 import io.github.safeslope.api.v1.dto.LockDto;
 import io.github.safeslope.api.v1.mapper.LockMapper;
-import io.github.safeslope.entities.Lock;
 import io.github.safeslope.lock.service.LockService;
+import io.github.safeslope.mqtt.service.MqttLockService;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +17,12 @@ public class LockController {
 
     private final LockService lockService;
     private final LockMapper lockMapper;
+    private final MqttLockService mqttLockService;
 
-    public LockController(LockService lockService, LockMapper lockMapper) {
+    public LockController(LockService lockService, LockMapper lockMapper, MqttLockService mqttLockService) {
         this.lockService = lockService;
         this.lockMapper = lockMapper;
+        this.mqttLockService = mqttLockService;
     }
 
     @GetMapping
@@ -40,13 +42,13 @@ public class LockController {
 
     @PostMapping("/{mac}/unlock")
     public ResponseEntity<Void> unlock(@PathVariable String mac) throws MqttException {
-        lockService.unlock(mac);
+        mqttLockService.unlock(mac);
         return ResponseEntity.accepted().build();
     }
 
     @PostMapping("/{mac}/lock")
     public ResponseEntity<Void> lock(@PathVariable String mac) throws MqttException {
-        lockService.lock(mac);
+        mqttLockService.lock(mac);
         return ResponseEntity.accepted().build();
     }
 
