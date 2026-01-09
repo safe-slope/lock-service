@@ -40,8 +40,14 @@ public class LockService {
     }
 
     public Lock getByMacAddress(String mac) {
-        return lockRepository.findByMacAddress(mac)
-            .orElseThrow(() -> new LockNotFoundException(mac));
+        Lock lock = lockRepository.findByMacAddress(mac);
+
+        if(lock != null){
+            return lock;
+        }
+        else{
+            throw new LockNotFoundException(mac);
+        }
     }
 
     public Lock create(Lock lock) {
@@ -50,9 +56,12 @@ public class LockService {
 
     public Lock update(Integer id, Lock lock) {
         lockRepository.findById(id).orElseThrow(() -> new LockNotFoundException(id));
+        // FIXME update the original entity, do not just replace ids
         lock.setId(id);
         return lockRepository.save(lock);
     }
+
+    // TODO add register method (similar to one of locker)
 
     public void delete(Integer id) {
         if (!lockRepository.existsById(id)) {
@@ -75,47 +84,4 @@ public class LockService {
         return lockRepository.findByLocker_SkiResort_Id(skiResortId);
     }
 
-    public void unlock(String mac) throws MqttException {
-        // iz MAC dobi id ključavnice, tenant ID
-        //      preveri če obstaja, če ne jih temu primerno ustvari (nedodeljen locker in lock z dodeljenim lockerjem)
-        // preveri trenutno stanje ključavnice
-        // pokliči anti-abuse
-        // pokliči skicard-verification
-        // dodaj nov lock-event v bazo
-        // pošlji ukaz nazaj ključavnici
-
-        Lock lock = getByMacAddress(mac);
-        SkiResort skiResort = lock.getLocker().getSkiResort();
-        Integer tenantId = skiResort.getTenantId();
-        Integer resortId = skiResort.getId();
-        Integer lockerId = lock.getLocker().getId();
-
-        try {
-            mqtt.sendCommand(tenantId, resortId, lockerId, "{\"cmd\":\"UNLOCK\"}");
-        } catch (MqttException e) {
-            throw new RuntimeException("Failed sending UNLOCK command via MQTT", e);
-        }
-    }
-
-    public void lock(String mac) throws MqttException {
-        // iz MAC dobi id ključavnice, tenant ID
-        //      preveri če obstaja, če ne jih temu primerno ustvari (nedodeljen locker in lock z dodeljenim lockerjem)
-        // preveri trenutno stanje ključavnice
-        // pokliči anti-abuse
-        // pokliči skicard-verification
-        // dodaj nov lock-event v bazo
-        // pošlji ukaz nazaj ključavnici
-
-        Lock lock = getByMacAddress(mac);
-        SkiResort skiResort = lock.getLocker().getSkiResort();
-        Integer tenantId = skiResort.getTenantId();
-        Integer resortId = skiResort.getId();
-        Integer lockerId = lock.getLocker().getId();
-
-        try {
-            mqtt.sendCommand(tenantId, resortId, lockerId, "{\"cmd\":\"LOCK\"}");
-        } catch (MqttException e) {
-            throw new RuntimeException("Failed sending LOCK command via MQTT", e);
-        }
-    }
 }
