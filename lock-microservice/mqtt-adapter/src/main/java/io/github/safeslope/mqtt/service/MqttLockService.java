@@ -3,6 +3,7 @@ package io.github.safeslope.mqtt.service;
 import io.github.safeslope.entities.Lock;
 import io.github.safeslope.entities.SkiResort;
 import io.github.safeslope.lock.repository.LockRepository;
+import io.github.safeslope.lock.service.LockNotFoundException;
 import io.github.safeslope.locker.repository.LockerRepository;
 import io.github.safeslope.mqtt.MqttLockAdapter;
 import io.github.safeslope.skiresort.repository.SkiResortRepository;
@@ -21,9 +22,12 @@ public class MqttLockService {
         this.mqtt = mqtt;
     }
 
-    public void unlock(String mac) throws MqttException {
+    public void unlock(String mac) {
         Lock lock = lockRepository.findByMacAddress(mac);
 
+        if(lock == null){
+            throw new LockNotFoundException(mac);
+        }
 
         SkiResort skiResort = lock.getLocker().getSkiResort();
         Integer tenantId = skiResort.getTenantId();
@@ -38,7 +42,12 @@ public class MqttLockService {
     }
 
     public void lock(String mac) throws MqttException {
-        Lock lock = getByMacAddress(mac);
+        Lock lock = lockRepository.findByMacAddress(mac);
+
+        if(lock == null){
+            throw new LockNotFoundException(mac);
+        }
+
         SkiResort skiResort = lock.getLocker().getSkiResort();
         Integer tenantId = skiResort.getTenantId();
         Integer resortId = skiResort.getId();
