@@ -1,12 +1,18 @@
 package io.github.safeslope.mqtt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.safeslope.entities.Lock;
 import io.github.safeslope.mqtt.config.MqttProperties;
+import io.github.safeslope.mqtt.dto.*;
+import io.github.safeslope.mqtt.service.CommandAuthorizationService;
 import jakarta.annotation.PostConstruct;
 import org.eclipse.paho.client.mqttv3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Service
@@ -16,12 +22,21 @@ public class MqttLockAdapter implements MqttCallbackExtended {
 
     private final IMqttAsyncClient client;
     private final MqttProperties props;
-    private final MqttEventHandler eventHandler;
+    private final MqttTopics mqttTopics;
+    private final ObjectMapper objectMapper;
+    private final CommandAuthorizationService commandAuthorizationService;
 
-    public MqttLockAdapter(IMqttAsyncClient client, MqttProperties props, MqttEventHandler eventHandler) {
+    public MqttLockAdapter(
+            IMqttAsyncClient client,
+            MqttProperties props,
+            MqttTopics mqttTopics,
+            ObjectMapper objectMapper,
+            CommandAuthorizationService commandAuthorizationService) {
         this.client = client;
         this.props = props;
-        this.eventHandler = eventHandler;
+        this.mqttTopics = mqttTopics;
+        this.objectMapper = objectMapper;
+        this.commandAuthorizationService = commandAuthorizationService;
     }
 
     @PostConstruct
@@ -30,8 +45,10 @@ public class MqttLockAdapter implements MqttCallbackExtended {
 
         try {
             if (client.isConnected()) {
-                subscribeToEvents();
-            } 
+                subscribeToRequest();
+                subscribeToStatus();
+                subscribeToRegistration();
+            }
         } catch (MqttException e) {
             log.error("MQTT subscribe failed", e);
         }
@@ -45,24 +62,89 @@ public class MqttLockAdapter implements MqttCallbackExtended {
     public void connectComplete(boolean reconnect, String serverURI) {
         log.info("MQTT connected (reconnect={}) to {}", reconnect, serverURI);
         try {
-            subscribeToEvents();
+            subscribeToRequest();
+            subscribeToStatus();
+            subscribeToRegistration();
         } catch (MqttException e) {
             log.error("MQTT subscribe failed", e);
         }
     }
 
-    private void subscribeToEvents() throws MqttException {
-        client.subscribe(props.getEventsTopic(), props.getQos());
-        log.info("Subscribed to events topic={} qos={}", props.getEventsTopic(), props.getQos());
+    private void subscribeToRequest() throws MqttException {
+        client.subscribe(mqttTopics.getRequestTopic(), props.getQos());
+        log.info("Subscribed to request topic={} qos={}", mqttTopics.getRequestTopic(), props.getQos());
+    }
+
+    private void subscribeToStatus() throws MqttException {
+        client.subscribe(mqttTopics.getStatusTopic(), props.getQos());
+        log.info("Subscribed to status topic={} qos={}", mqttTopics.getStatusTopic(), props.getQos());
+    }
+
+    public void subscribeToRegistration() throws MqttException {
+        client.subscribe(mqttTopics.getRegistrationTopic(), props.getQos());
+        log.info("Subscribed to registration topic={} qos={}", mqttTopics.getRegistrationTopic(), props.getQos());
     }
 
     //lock->backend
     @Override
-    public void messageArrived(String topic, MqttMessage message) {
-        String payload = new String(message.getPayload(), StandardCharsets.UTF_8);
-        log.info("MQTT in topic={} payload={}", topic, payload);
+    public void messageArrived(String topic, MqttMessage message) throws IOException, MqttException {
+        //first figure out what topic the message is from (request or status)
+        MqttTopics.TopicProperties topicProperties = MqttTopics.tokenizeTopic(topic);
 
-        eventHandler.handleLockEventMessage(topic, payload);
+        switch (topicProperties.type){
+            // TODO create handler classes for each topic type
+            case "request":
+                //parse the Mqtt message into a request dto
+                RequestDto requestDto=objectMapper.readValue(message.getPayload(), RequestDto.class);
+
+                //check if all criteria match to perform the requested action
+                if (!commandAuthorizationService.authorize(requestDto.getLockId(), requestDto.getCommand(), requestDto.getSkiTicketId())) {
+                    return;
+                }
+
+                //create a CommandDto
+                CommandDto commandDto = new CommandDto(
+                        requestDto.getMsgId(),
+                        requestDto.getLockerId(),
+                        requestDto.getLockId(),
+                        requestDto.getSkiTicketId(),
+                        requestDto.getCommand(),
+                        requestDto.getTimestamp()
+                );
+
+                //send the command to the locker on the correct topic
+                sendCommand(topicProperties.tenantId, topicProperties.resortId, topicProperties.lockerId, commandDto);
+                break;
+
+            case "status":
+                StatusDto statusDto = objectMapper.readValue(message.getPayload(), StatusDto.class);
+
+                commandAuthorizationService.persist(statusDto);
+
+                break;
+
+            case "registration":
+                RegistrationDto registrationDto = objectMapper.readValue(message.getPayload(), RegistrationDto.class);
+
+                Lock lock = commandAuthorizationService.register(registrationDto);
+
+                ResponseDto responseDto = new ResponseDto(
+                        registrationDto.getMsgId(),
+                        DtoConstants.Status.SUCCESS.toString(),
+                        lock.getMacAddress(),
+                        lock.getId(),
+                        lock.getLocker().getId(),
+                        registrationDto.getTimestamp()
+                );
+
+                sendResponse(topicProperties.tenantId, topicProperties.resortId, topicProperties.lockerId, responseDto);
+                break;
+
+            default:
+                break;
+        }
+        String payload = new String(message.getPayload(), StandardCharsets.UTF_8);
+
     }
 
     @Override
@@ -71,13 +153,23 @@ public class MqttLockAdapter implements MqttCallbackExtended {
     }
 
     // backend -> lock
-    public void sendCommand(Integer tenantId, Integer resortId, Integer lockerId, String jsonPayload) throws MqttException {
-        String topic = String.format(props.getCommandsTopicFormat(), tenantId, resortId, lockerId);
+    public void sendCommand(Integer tenantId, Integer resortId, Integer lockerId, CommandDto dto) throws MqttException, JsonProcessingException {
+        String topic = mqttTopics.lockerCommand(tenantId, resortId, lockerId);
 
-        MqttMessage msg = new MqttMessage(jsonPayload.getBytes(StandardCharsets.UTF_8));
+        MqttMessage msg = new MqttMessage(objectMapper.writeValueAsBytes(dto));
         msg.setQos(props.getQos());
 
         client.publish(topic, msg);
-        log.info("MQTT OUT topic={} payload={}", topic, jsonPayload);
+        log.info("MQTT OUT topic={} payload={}", topic, objectMapper.writeValueAsBytes(dto));
+    }
+
+    public void sendResponse(Integer tenantId, Integer resortId, Integer lockerId, ResponseDto dto) throws MqttException, JsonProcessingException {
+        String topic = mqttTopics.lockerResponse(tenantId, resortId, lockerId);
+
+        MqttMessage msg = new MqttMessage(objectMapper.writeValueAsBytes(dto));
+        msg.setQos(props.getQos());
+
+        client.publish(topic, msg);
+        log.info("MQTT OUT topic={} payload={}", topic, objectMapper.writeValueAsBytes(dto));
     }
 }

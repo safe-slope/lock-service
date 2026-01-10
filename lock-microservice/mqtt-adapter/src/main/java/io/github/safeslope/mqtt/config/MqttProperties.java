@@ -14,7 +14,4 @@ public class MqttProperties {
   private String password;
   private boolean cleanSession = true;
   private int qos = 1;
-  private String eventsTopic;
-  private String commandsTopicFormat;
-
 }
