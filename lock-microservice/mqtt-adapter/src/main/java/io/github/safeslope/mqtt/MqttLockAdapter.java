@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 @Service
 public class MqttLockAdapter implements MqttCallbackExtended {
@@ -88,63 +87,78 @@ public class MqttLockAdapter implements MqttCallbackExtended {
     //lock->backend
     @Override
     public void messageArrived(String topic, MqttMessage message) throws IOException, MqttException {
-        //first figure out what topic the message is from (request or status)
-        MqttTopics.TopicProperties topicProperties = MqttTopics.tokenizeTopic(topic);
+        try {
+            //first figure out what topic the message is from (request or status)
+            MqttTopics.TopicProperties topicProperties = MqttTopics.tokenizeTopic(topic);
 
-        switch (topicProperties.type){
-            // TODO create handler classes for each topic type
-            case "request":
-                //parse the Mqtt message into a request dto
-                RequestDto requestDto=objectMapper.readValue(message.getPayload(), RequestDto.class);
+            switch (topicProperties.type){
+                // TODO create handler classes for each topic type
+                case "request":
+                    //parse the Mqtt message into a request dto
+                    RequestDto requestDto=objectMapper.readValue(message.getPayload(), RequestDto.class);
 
-                //check if all criteria match to perform the requested action
-                if (!commandAuthorizationService.authorize(requestDto.getLockId(), requestDto.getCommand(), requestDto.getSkiTicketId())) {
-                    return;
-                }
+                    //check if all criteria match to perform the requested action
+                    if (!commandAuthorizationService.authorize(requestDto.getLockId(), requestDto.getCommand(), requestDto.getSkiTicketId())) {
+                        return;
+                    }
 
-                //create a CommandDto
-                CommandDto commandDto = new CommandDto(
-                        requestDto.getMsgId(),
-                        requestDto.getLockerId(),
-                        requestDto.getLockId(),
-                        requestDto.getSkiTicketId(),
-                        requestDto.getCommand(),
-                        requestDto.getTimestamp()
-                );
+                    //create a CommandDto
+                    CommandDto commandDto = new CommandDto(
+                            requestDto.getMsgId(),
+                            requestDto.getLockerId(),
+                            requestDto.getLockId(),
+                            requestDto.getSkiTicketId(),
+                            requestDto.getCommand(),
+                            requestDto.getTimestamp()
+                    );
 
-                //send the command to the locker on the correct topic
-                sendCommand(topicProperties.tenantId, topicProperties.resortId, topicProperties.lockerId, commandDto);
-                break;
+                    //send the command to the locker on the correct topic
+                    sendCommand(topicProperties.tenantId, topicProperties.resortId, topicProperties.lockerId, commandDto);
+                    break;
 
-            case "status":
-                StatusDto statusDto = objectMapper.readValue(message.getPayload(), StatusDto.class);
+                case "status":
+                    StatusDto statusDto = objectMapper.readValue(message.getPayload(), StatusDto.class);
 
-                commandAuthorizationService.persist(statusDto);
+                    commandAuthorizationService.persist(statusDto);
 
-                break;
+                    break;
 
-            case "registration":
-                RegistrationDto registrationDto = objectMapper.readValue(message.getPayload(), RegistrationDto.class);
+                case "registration":
+                    RegistrationDto registrationDto = objectMapper.readValue(message.getPayload(), RegistrationDto.class);
 
-                Lock lock = commandAuthorizationService.register(registrationDto);
+                    Lock lock = commandAuthorizationService.register(registrationDto);
 
-                ResponseDto responseDto = new ResponseDto(
-                        registrationDto.getMsgId(),
-                        DtoConstants.Status.SUCCESS.toString(),
-                        lock.getMacAddress(),
-                        lock.getId(),
-                        lock.getLocker().getId(),
-                        registrationDto.getTimestamp()
-                );
+                    if (lock == null) {
+                        log.error("Registration failed: lock is null for MAC address {}", registrationDto.getMacAddress());
+                        return;
+                    }
 
-                sendResponse(topicProperties.tenantId, topicProperties.resortId, topicProperties.lockerId, responseDto);
-                break;
+                    ResponseDto responseDto = new ResponseDto(
+                            registrationDto.getMsgId(),
+                            DtoConstants.Status.SUCCESS.toString(),
+                            lock.getMacAddress(),
+                            lock.getId(),
+                            lock.getLocker().getId(),
+                            registrationDto.getTimestamp()
+                    );
 
-            default:
-                break;
+                    sendResponse(topicProperties.tenantId, topicProperties.resortId, topicProperties.lockerId, responseDto);
+                    break;
+
+                default:
+                    log.warn("Received message on unknown topic type: {}", topicProperties.type);
+                    break;
+            }
+        } catch (JsonProcessingException e) {
+            log.error("Failed to parse MQTT message payload from topic {}", topic, e);
+            throw new IOException("Failed to parse MQTT message", e);
+        } catch (MqttException e) {
+            log.error("Failed to send MQTT response on topic {}", topic, e);
+            throw e;
+        } catch (Exception e) {
+            log.error("Unexpected error processing MQTT message from topic {}", topic, e);
+            throw e;
         }
-        String payload = new String(message.getPayload(), StandardCharsets.UTF_8);
-
     }
 
     @Override
