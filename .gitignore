@@ -1,6 +1,5 @@
 .vscode
 .idea
-.github/
 
 target/
 pom.xml.tag
