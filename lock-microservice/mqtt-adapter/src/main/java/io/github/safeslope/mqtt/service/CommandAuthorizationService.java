@@ -12,7 +12,7 @@ import io.github.safeslope.skiticket.service.SkiTicketService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
+import java.awt.Point;
 
 @Service
 @Transactional

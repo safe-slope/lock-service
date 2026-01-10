@@ -5,11 +5,9 @@ import io.github.safeslope.entities.SkiResort;
 import io.github.safeslope.lock.repository.LockRepository;
 import io.github.safeslope.locker.repository.LockerRepository;
 import io.github.safeslope.locker.service.LockerNotFoundException;
-import io.github.safeslope.mqtt.MqttLockAdapter;
 import io.github.safeslope.skiresort.repository.SkiResortRepository;
 import io.github.safeslope.skiresort.service.SkiResortNotFoundException;
 import jakarta.transaction.Transactional;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,13 +19,11 @@ public class LockService {
     private final LockRepository lockRepository;
     private final LockerRepository lockerRepository;
     private final SkiResortRepository skiResortRepository;
-    private final MqttLockAdapter mqtt;
 
-    public LockService(LockRepository lockRepository, LockerRepository lockerRepository, SkiResortRepository skiResortRepository, MqttLockAdapter mqtt) {
+    public LockService(LockRepository lockRepository, LockerRepository lockerRepository, SkiResortRepository skiResortRepository) {
         this.lockRepository = lockRepository;
         this.lockerRepository = lockerRepository;
         this.skiResortRepository = skiResortRepository;
-        this.mqtt = mqtt;
     }
 
     public List<Lock> getAllLocks() {

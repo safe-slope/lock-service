@@ -88,7 +88,7 @@ public class MqttLockService {
         try {
             mqtt.sendCommand(tenantId, resortId, lockerId, commandDto);
         } catch (MqttException e) {
-            throw new RuntimeException("Failed sending UNLOCK command via MQTT", e);
+            throw new RuntimeException("Failed sending LOCK command via MQTT", e);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

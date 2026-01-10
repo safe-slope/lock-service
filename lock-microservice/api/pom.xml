@@ -29,6 +29,12 @@
       <artifactId>entity</artifactId>
     </dependency>
 
+    <!-- MQTT adapter module dependency for MQTT lock operations -->
+    <dependency>
+      <groupId>io.github.safeslope</groupId>
+      <artifactId>mqtt-adapter</artifactId>
+    </dependency>
+
     <!-- Spring Boot Web (includes Jackson, validation support for REST controllers) -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
