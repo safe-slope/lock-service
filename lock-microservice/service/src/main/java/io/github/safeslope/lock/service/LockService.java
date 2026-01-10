@@ -57,8 +57,6 @@ public class LockService {
         return lockRepository.save(lock);
     }
 
-    // TODO add register method (similar to one of locker)
-
     public void delete(Integer id) {
         if (!lockRepository.existsById(id)) {
             throw new LockNotFoundException(id);
