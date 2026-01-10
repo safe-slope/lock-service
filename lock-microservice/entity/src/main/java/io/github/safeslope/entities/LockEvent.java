@@ -28,7 +28,7 @@ public class LockEvent {
     private Lock lock;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ski_ticket_id")
+    @JoinColumn(name = "ski_ticket_id", nullable = true)
     private SkiTicket skiTicket;
 
     @Enumerated(EnumType.STRING)
