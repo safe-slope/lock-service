@@ -2,6 +2,7 @@ package io.github.safeslope.mqtt.service;
 
 import io.github.safeslope.entities.*;
 import io.github.safeslope.location.service.LocationService;
+import io.github.safeslope.lock.service.LockNotFoundException;
 import io.github.safeslope.lock.service.LockService;
 import io.github.safeslope.locker.service.LockerService;
 import io.github.safeslope.lockevent.service.LockEventService;
@@ -12,7 +13,7 @@ import io.github.safeslope.skiticket.service.SkiTicketService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
+import java.awt.Point;
 
 @Service
 @Transactional
@@ -85,7 +86,10 @@ public class CommandAuthorizationService {
 
     public void persist(StatusDto statusDto) {
         Lock lock = lockService.getLock(statusDto.getLockId());
-        SkiTicket skiTicket = skiTicketService.get(statusDto.getSkiTicketId());
+        SkiTicket skiTicket = null;
+        if (statusDto.getSkiTicketId() != null) {
+            skiTicket = skiTicketService.get(statusDto.getSkiTicketId());
+        }
         LockEvent.EventType eventType = getEventType(statusDto);
 
         //create a lock entity
@@ -152,7 +156,7 @@ public class CommandAuthorizationService {
             //update lock entity in the database
             return lockService.update(lock.getId(), l);
         }
-        catch (Exception e){
+        catch (LockNotFoundException e){
             Locker locker = lockerService.get(registrationDto.getLockerId());
 
             //create a location object
