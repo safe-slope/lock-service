@@ -1,17 +1,35 @@
 package io.github.safeslope.mqtt.service;
 
-import io.github.safeslope.entities.Lock;
+import io.github.safeslope.entities.*;
+import io.github.safeslope.location.service.LocationService;
 import io.github.safeslope.lock.service.LockService;
+import io.github.safeslope.locker.service.LockerService;
+import io.github.safeslope.lockevent.service.LockEventService;
 import io.github.safeslope.mqtt.dto.DtoConstants;
+import io.github.safeslope.mqtt.dto.RegistrationDto;
+import io.github.safeslope.mqtt.dto.StatusDto;
+import io.github.safeslope.skiticket.service.SkiTicketService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
+
 @Service
+@Transactional
 public class CommandAuthorizationService {
 
     private final LockService lockService;
+    private final LockEventService lockEventService;
+    private final SkiTicketService skiTicketService;
+    private final LockerService lockerService;
+    private final LocationService locationService;
 
-    public CommandAuthorizationService(LockService lockService) {
+    public CommandAuthorizationService(LockService lockService, LockEventService lockEventService, SkiTicketService skiTicketService, LockerService lockerService, LocationService locationService) {
         this.lockService = lockService;
+        this.lockEventService = lockEventService;
+        this.skiTicketService = skiTicketService;
+        this.lockerService = lockerService;
+        this.locationService = locationService;
     }
 
 
@@ -55,14 +73,110 @@ public class CommandAuthorizationService {
         }
     }
 
-    private boolean antiAbuseVerification(Integer lockId, Integer skiTicketId) {
+    private static boolean antiAbuseVerification(Integer lockId, Integer skiTicketId) {
         // TODO add api call to the anti-abuse service
         return true;
     }
 
-    private boolean skiTicketVerification(Integer skiTicketId) {
+    private static boolean skiTicketVerification(Integer skiTicketId) {
         // TODO add api call to the ski-card-verification service
         return true;
+    }
+
+    public void persist(StatusDto statusDto) {
+        Lock lock = lockService.getLock(statusDto.getLockId());
+        SkiTicket skiTicket = skiTicketService.get(statusDto.getSkiTicketId());
+        LockEvent.EventType eventType = getEventType(statusDto);
+
+        //create a lock entity
+        Lock l = Lock.builder()
+                .id(lock.getId())
+                .macAddress(lock.getMacAddress())
+                .dateAdded(lock.getDateAdded())
+                .location(lock.getLocation())
+                .mode(statusDto.getMode())
+                .state(statusDto.getState())
+                .locker(lock.getLocker())
+                .build();
+
+        //update lock entity in the database
+        Lock updatedLock = lockService.update(lock.getId(), l);
+
+
+        //create a lock event entity
+        LockEvent le = LockEvent.builder()
+                .lock(updatedLock)
+                .eventTime(statusDto.getTimestamp())
+                .skiTicket(skiTicket)
+                .eventType(eventType)
+                .build();
+
+        //persist lock event entity in the database
+        lockEventService.create(le);
+
+    }
+
+    private static LockEvent.EventType getEventType(StatusDto statusDto) {
+        LockEvent.EventType eventType = null;
+
+        switch (statusDto.getCommand()) {
+            case LOCK -> eventType = LockEvent.EventType.LOCK;
+            case UNLOCK -> eventType = LockEvent.EventType.UNLOCK;
+            case SET_MODE_TO_MAINTENANCE -> eventType = LockEvent.EventType.SET_MODE_TO_MAINTENANCE;
+            case SET_MODE_TO_NORMAL -> eventType = LockEvent.EventType.SET_MODE_TO_NORMAL;
+            case SET_MODE_TO_DISABLED -> eventType = LockEvent.EventType.SET_MODE_TO_DISABLED;
+            case SET_MODE_TO_SERVICE -> eventType = LockEvent.EventType.SET_MODE_TO_SERVICE;
+        }
+
+        return eventType;
+    }
+
+    public Lock register(RegistrationDto registrationDto) {
+        //first check if the lock with a specified mac address exists
+        try{
+            Lock lock =  lockService.getByMacAddress(registrationDto.getMacAddress());
+
+            //update state of the existing lock
+
+            //create a lock entity
+            Lock l = Lock.builder()
+                    .id(lock.getId())
+                    .macAddress(lock.getMacAddress())
+                    .dateAdded(lock.getDateAdded())
+                    .location(lock.getLocation())
+                    .mode(lock.getMode())
+                    .state(registrationDto.getState())
+                    .locker(lock.getLocker())
+                    .build();
+
+            //update lock entity in the database
+            return lockService.update(lock.getId(), l);
+        }
+        catch (Exception e){
+            Locker locker = lockerService.get(registrationDto.getLockerId());
+
+            //create a location object
+            Point point = new Point(registrationDto.getLat(), registrationDto.getLon());
+            Location location = Location.builder()
+                    .coordinates(point)
+                    .build();
+
+            //persist location in the database
+            Location updatedLocation = locationService.create(location);
+
+            //the lock does not yet exist, create a new one and return it
+            return lockService.create(
+                    Lock.builder()
+                            .macAddress(registrationDto.getMacAddress())
+                            .locker(locker)
+                            .dateAdded(registrationDto.getTimestamp())
+                            .state(registrationDto.getState())
+                            .mode(Lock.Mode.NORMAL)
+                            .location(updatedLocation)
+                            .build());
+        }
+
+
     }
 
 }

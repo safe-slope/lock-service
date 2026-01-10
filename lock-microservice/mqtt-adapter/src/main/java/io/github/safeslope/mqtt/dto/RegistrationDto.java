@@ -15,4 +15,6 @@ public class RegistrationDto {
     private String macAddress;
     private Lock.State state;
     private LocalDateTime timestamp;
+    private Integer lat;
+    private Integer lon;
 }

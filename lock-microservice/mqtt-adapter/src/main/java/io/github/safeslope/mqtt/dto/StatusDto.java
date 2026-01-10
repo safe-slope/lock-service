@@ -18,4 +18,5 @@ public class StatusDto {
     private Lock.State state;
     private Lock.Mode mode;
     private DtoConstants.Status status;
+    private DtoConstants.Command command;
 }
