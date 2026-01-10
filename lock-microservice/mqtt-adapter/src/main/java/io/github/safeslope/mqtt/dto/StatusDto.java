@@ -13,6 +13,7 @@ public class StatusDto {
     private UUID msgId;
     private Integer lockerId;
     private Integer lockId;
+    private Integer skiTicketId;
     private LocalDateTime timestamp;
     private Lock.State state;
     private Lock.Mode mode;
