@@ -5,11 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 public class StatusDto {
-    private Integer msgId;
+    private UUID msgId;
     private Integer lockerId;
     private Integer lockId;
     private LocalDateTime timestamp;

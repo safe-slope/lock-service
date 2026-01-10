@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 public class CommandDto {
-    private Integer msgId;
+    private UUID msgId;
     private Integer lockerId;
     private Integer lockId;
     private DtoConstants.Command command;

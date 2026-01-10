@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class RequestDto {
-    private Integer msgId;
+    private UUID msgId;
     private Integer lockerId;
     private Integer lockId;
     private Integer skiTicketId;

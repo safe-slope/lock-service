@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class ResponseDto {
-    private Integer msgId;
+    private UUID msgId;
     private String status;
     private String lockMacAddress;
     private Integer lockId;
