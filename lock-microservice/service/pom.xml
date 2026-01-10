@@ -35,11 +35,6 @@
       <scope>provided</scope>
     </dependency>
 
-    <dependency>
-      <groupId>io.github.safeslope</groupId>
-      <artifactId>mqtt-adapter</artifactId>
-    </dependency>
-
 
     <!-- Test helpers -->
     <dependency>
