@@ -1,4 +1,4 @@
-package io.github.safeslope.mqtt.s2s.dto;
+package io.github.safeslope.mqtt.s2s;
 
 public record EvaluateResponse(
         AntiAbuseDecision decision,
