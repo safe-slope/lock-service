@@ -16,4 +16,13 @@ public class DownstreamClientsConfig {
                 .baseUrl(baseUrl)
                 .build();
     }
+    
+    @Bean
+    RestClient antiAbuseRestClient(
+            @Value("${services.anti-abuse.base-url}") String baseUrl
+    ) {
+        return RestClient.builder()
+                .baseUrl(baseUrl)
+                .build();
+    }
 }

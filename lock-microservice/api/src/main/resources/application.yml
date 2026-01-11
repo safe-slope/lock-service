@@ -25,3 +25,5 @@ services:
   ski-card-verification:
     base-url: ${SKI_CARD_VERIFICATION_BASE_URL:http://ski-card-verification:8080}
     resort-id: ${RESORT_ID:1}
+  anti-abuse:
+    base-url: ${ANTI_ABUSE_BASE_URL:http://anti-abuse:8080}

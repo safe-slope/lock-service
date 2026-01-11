@@ -6,11 +6,17 @@ import io.github.safeslope.lock.service.LockNotFoundException;
 import io.github.safeslope.lock.service.LockService;
 import io.github.safeslope.locker.service.LockerService;
 import io.github.safeslope.lockevent.service.LockEventService;
+import io.github.safeslope.mqtt.s2s.dto.AntiAbuseAction;
+import io.github.safeslope.mqtt.s2s.dto.AntiAbuseDecision;
+import io.github.safeslope.mqtt.s2s.dto.EvaluateRequest;
+import io.github.safeslope.mqtt.s2s.dto.EvaluateResponse;
+import io.github.safeslope.mqtt.s2s.dto.VerifyCardRequest;
+import io.github.safeslope.mqtt.s2s.dto.VerifyCardResponse;
 import io.github.safeslope.mqtt.dto.DtoConstants;
 import io.github.safeslope.mqtt.dto.RegistrationDto;
 import io.github.safeslope.mqtt.dto.StatusDto;
-import io.github.safeslope.mqtt.s2s.dto.VerifyCardRequest;
-import io.github.safeslope.mqtt.s2s.dto.VerifyCardResponse;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import io.github.safeslope.skiticket.service.SkiTicketService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -34,6 +40,9 @@ public class CommandAuthorizationService {
     private final RestClient skiCardClient;
     private final Integer resortId;
 
+    private final RestClient antiAbuseClient;
+
+
 
    public CommandAuthorizationService(
             LockService lockService,
@@ -41,7 +50,9 @@ public class CommandAuthorizationService {
             SkiTicketService skiTicketService,
             LockerService lockerService,
             LocationService locationService,
-            RestClient skiCardVerificationRestClient,
+          
+            @Qualifier("skiCardVerificationRestClient") RestClient skiCardClient,
+            @Qualifier("antiAbuseRestClient") RestClient antiAbuseClient,
             @Value("${services.ski-card-verification.resort-id}") Integer resortId
     ) {
         this.lockService = lockService;
@@ -50,7 +61,8 @@ public class CommandAuthorizationService {
         this.lockerService = lockerService;
         this.locationService = locationService;
 
-        this.skiCardClient = skiCardVerificationRestClient;
+        this.skiCardClient = skiCardClient;
+        this.antiAbuseClient = antiAbuseClient;
         this.resortId = resortId;
     }
 
@@ -96,10 +108,43 @@ public class CommandAuthorizationService {
         }
     }
 
-    private static boolean antiAbuseVerification(Integer lockId, Integer skiTicketId) {
-        // TODO add api call to the anti-abuse service
-        return true;
+    private boolean antiAbuseVerification(Integer lockId, Integer skiTicketId) {
+        if (skiTicketId == null) return false;
+
+        try {
+            // Potrebujemo lockerId -> vzamemo iz lockId
+            Lock lock = lockService.getLock(lockId);
+            Integer lockerId = lock.getLocker() != null ? lock.getLocker().getId() : null;
+
+            // Ker nočeš spreminjat authorize, action določimo tukaj:
+            // - če je trenutno UNLOCKED in hočeš LOCK -> action LOCK
+            // - če je trenutno LOCKED in hočeš UNLOCK -> action UNLOCK
+            // To deluje, ker authorize že prej preveri state za posamezen command.
+            AntiAbuseAction action = (lock.getState() == Lock.State.UNLOCKED)
+                    ? AntiAbuseAction.LOCK
+                    : AntiAbuseAction.UNLOCK;
+
+            var req = new EvaluateRequest(
+                    skiTicketId,
+                    lockId,
+                    lockerId,
+                    resortId,
+                    action,
+                    System.currentTimeMillis()
+            );
+
+            var resp = antiAbuseClient.post()
+                    .uri("/api/v1/anti-abuse/evaluate") // prilagodi na tvoj anti-abuse endpoint
+                    .body(req)
+                    .retrieve()
+                    .body(EvaluateResponse.class);
+
+            return resp != null && resp.decision() == AntiAbuseDecision.ALLOW;
+        } catch (Exception e) {
+            return false; 
+        }
     }
+
 
     private boolean skiTicketVerification(Integer skiTicketId) {
         if (skiTicketId == null) return false;
