@@ -29,6 +29,7 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
     <spring.boot.version>3.3.4</spring.boot.version>
+    <spring.doc.version>1.8.0</spring.doc.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -84,6 +85,14 @@
         <version>${spring.boot.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+
+      <!-- Source: https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui -->
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-ui</artifactId>
+        <version>${spring.doc.version}</version>
+        <scope>compile</scope>
       </dependency>
 
       <dependency>

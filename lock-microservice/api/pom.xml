@@ -29,6 +29,12 @@
       <artifactId>entity</artifactId>
     </dependency>
 
+    <!-- Source: https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui -->
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-ui</artifactId>
+    </dependency>
+
     <!-- MQTT adapter module dependency for MQTT lock operations -->
     <dependency>
       <groupId>io.github.safeslope</groupId>
