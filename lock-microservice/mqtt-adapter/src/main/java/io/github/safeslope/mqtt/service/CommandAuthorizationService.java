@@ -6,12 +6,24 @@ import io.github.safeslope.lock.service.LockNotFoundException;
 import io.github.safeslope.lock.service.LockService;
 import io.github.safeslope.locker.service.LockerService;
 import io.github.safeslope.lockevent.service.LockEventService;
+import io.github.safeslope.mqtt.s2s.AntiAbuseAction;
+import io.github.safeslope.mqtt.s2s.AntiAbuseDecision;
+import io.github.safeslope.mqtt.s2s.EvaluateRequest;
+import io.github.safeslope.mqtt.s2s.EvaluateResponse;
+import io.github.safeslope.mqtt.s2s.VerifyCardRequest;
+import io.github.safeslope.mqtt.s2s.VerifyCardResponse;
 import io.github.safeslope.mqtt.dto.DtoConstants;
 import io.github.safeslope.mqtt.dto.RegistrationDto;
 import io.github.safeslope.mqtt.dto.StatusDto;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import io.github.safeslope.skiticket.service.SkiTicketService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
+import org.springframework.web.client.RestClient;
+import org.springframework.beans.factory.annotation.Value;
+
 
 import java.awt.Point;
 
@@ -25,13 +37,35 @@ public class CommandAuthorizationService {
     private final LockerService lockerService;
     private final LocationService locationService;
 
-    public CommandAuthorizationService(LockService lockService, LockEventService lockEventService, SkiTicketService skiTicketService, LockerService lockerService, LocationService locationService) {
+    private final RestClient skiCardClient;
+    private final Integer resortId;
+
+    private final RestClient antiAbuseClient;
+
+
+
+   public CommandAuthorizationService(
+            LockService lockService,
+            LockEventService lockEventService,
+            SkiTicketService skiTicketService,
+            LockerService lockerService,
+            LocationService locationService,
+          
+            @Qualifier("skiCardVerificationRestClient") RestClient skiCardClient,
+            @Qualifier("antiAbuseRestClient") RestClient antiAbuseClient,
+            @Value("${services.ski-card-verification.resort-id}") Integer resortId
+    ) {
         this.lockService = lockService;
         this.lockEventService = lockEventService;
         this.skiTicketService = skiTicketService;
         this.lockerService = lockerService;
         this.locationService = locationService;
+
+        this.skiCardClient = skiCardClient;
+        this.antiAbuseClient = antiAbuseClient;
+        this.resortId = resortId;
     }
+
 
 
     public boolean authorize(Integer lockId, DtoConstants.Command command, Integer skiTicketId) {
@@ -74,15 +108,62 @@ public class CommandAuthorizationService {
         }
     }
 
-    private static boolean antiAbuseVerification(Integer lockId, Integer skiTicketId) {
-        // TODO add api call to the anti-abuse service
-        return true;
+    private boolean antiAbuseVerification(Integer lockId, Integer skiTicketId) {
+        if (skiTicketId == null) return false;
+
+        try {
+            // Potrebujemo lockerId -> vzamemo iz lockId
+            Lock lock = lockService.getLock(lockId);
+            Integer lockerId = lock.getLocker() != null ? lock.getLocker().getId() : null;
+
+            // Ker nočeš spreminjat authorize, action določimo tukaj:
+            // - če je trenutno UNLOCKED in hočeš LOCK -> action LOCK
+            // - če je trenutno LOCKED in hočeš UNLOCK -> action UNLOCK
+            // To deluje, ker authorize že prej preveri state za posamezen command.
+            AntiAbuseAction action = (lock.getState() == Lock.State.UNLOCKED)
+                    ? AntiAbuseAction.LOCK
+                    : AntiAbuseAction.UNLOCK;
+
+            var req = new EvaluateRequest(
+                    skiTicketId,
+                    lockId,
+                    lockerId,
+                    resortId,
+                    action,
+                    System.currentTimeMillis()
+            );
+
+            var resp = antiAbuseClient.post()
+                    .uri("/api/v1/anti-abuse/evaluate") // prilagodi na tvoj anti-abuse endpoint
+                    .body(req)
+                    .retrieve()
+                    .body(EvaluateResponse.class);
+
+            return resp != null && resp.decision() == AntiAbuseDecision.ALLOW;
+        } catch (Exception e) {
+            return false; 
+        }
     }
 
-    private static boolean skiTicketVerification(Integer skiTicketId) {
-        // TODO add api call to the ski-card-verification service
-        return true;
+
+    private boolean skiTicketVerification(Integer skiTicketId) {
+        if (skiTicketId == null) return false;
+
+        try {
+            var req = new VerifyCardRequest(skiTicketId.toString(), resortId);
+
+            var resp = skiCardClient.post()
+                    .uri("/api/v1/ski-card/verify")
+                    .body(req)
+                    .retrieve()
+                    .body(VerifyCardResponse.class);
+
+            return resp != null && resp.valid();
+        } catch (Exception e) {
+            return false; // fail-closed
+        }
     }
+    
 
     public void persist(StatusDto statusDto) {
         Lock lock = lockService.getLock(statusDto.getLockId());
