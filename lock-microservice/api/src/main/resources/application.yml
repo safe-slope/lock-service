@@ -20,3 +20,8 @@ logging:
   level:
     io.github.safeslope.mqtt: DEBUG
     org.eclipse.paho.client.mqttv3: INFO
+
+services:
+  ski-card-verification:
+    base-url: ${SKI_CARD_VERIFICATION_BASE_URL:http://ski-card-verification:8080}
+    resort-id: ${RESORT_ID:1}
