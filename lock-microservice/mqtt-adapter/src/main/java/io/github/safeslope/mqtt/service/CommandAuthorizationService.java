@@ -112,14 +112,10 @@ public class CommandAuthorizationService {
         if (skiTicketId == null) return false;
 
         try {
-            // Potrebujemo lockerId -> vzamemo iz lockId
+    
             Lock lock = lockService.getLock(lockId);
             Integer lockerId = lock.getLocker() != null ? lock.getLocker().getId() : null;
 
-            // Ker nočeš spreminjat authorize, action določimo tukaj:
-            // - če je trenutno UNLOCKED in hočeš LOCK -> action LOCK
-            // - če je trenutno LOCKED in hočeš UNLOCK -> action UNLOCK
-            // To deluje, ker authorize že prej preveri state za posamezen command.
             AntiAbuseAction action = (lock.getState() == Lock.State.UNLOCKED)
                     ? AntiAbuseAction.LOCK
                     : AntiAbuseAction.UNLOCK;
@@ -134,7 +130,7 @@ public class CommandAuthorizationService {
             );
 
             var resp = antiAbuseClient.post()
-                    .uri("/api/v1/anti-abuse/evaluate") // prilagodi na tvoj anti-abuse endpoint
+                    .uri("/api/v1/anti-abuse/evaluate") 
                     .body(req)
                     .retrieve()
                     .body(EvaluateResponse.class);
