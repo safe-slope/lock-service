@@ -5,6 +5,8 @@ import io.github.safeslope.api.v1.mapper.LockMapper;
 import io.github.safeslope.lock.service.LockService;
 import io.github.safeslope.mqtt.service.MqttLockService;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +28,8 @@ public class LockController {
     }
 
     @GetMapping
-    public List<LockDto> list() {
-        return lockService.getAllLocks().stream().map(lockMapper::toDto).collect(Collectors.toList());
+    public Page<LockDto> list(Pageable pageable) {
+        return lockService.getAllLocks(pageable).map(lockMapper::toDto);
     }
 
     @GetMapping("/{id}")

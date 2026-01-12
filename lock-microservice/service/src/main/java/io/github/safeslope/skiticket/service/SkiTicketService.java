@@ -3,6 +3,8 @@ package io.github.safeslope.skiticket.service;
 import io.github.safeslope.entities.SkiTicket;
 import io.github.safeslope.skiticket.repository.SkiTicketRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,10 @@ public class SkiTicketService {
 
     public List<SkiTicket> getAll() {
         return repo.findAll();
+    }
+
+    public Page<SkiTicket> getAll(Pageable pageable) {
+        return repo.findAll(pageable);
     }
 
     public SkiTicket get(Integer id) {
@@ -48,5 +54,9 @@ public class SkiTicketService {
 
     public List<SkiTicket> getAllBySkiResortId(Integer skiResortId) {
         return repo.findBySkiResort_Id(skiResortId);
+    }
+
+    public Page<SkiTicket> getAllBySkiResortId(Integer skiResortId, Pageable pageable) {
+        return repo.findBySkiResort_Id(skiResortId, pageable);
     }
 }

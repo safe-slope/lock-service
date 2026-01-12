@@ -8,6 +8,8 @@ import io.github.safeslope.locker.service.LockerNotFoundException;
 import io.github.safeslope.skiresort.repository.SkiResortRepository;
 import io.github.safeslope.skiresort.service.SkiResortNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +30,10 @@ public class LockService {
 
     public List<Lock> getAllLocks() {
         return lockRepository.findAll();
+    }
+
+    public Page<Lock> getAllLocks(Pageable pageable) {
+        return lockRepository.findAll(pageable);
     }
 
     public Lock getLock(Integer id) {
@@ -71,11 +77,25 @@ public class LockService {
         return lockRepository.findByLocker_Id(lockerId);
     }
 
+    public Page<Lock> getAllByLockerId(Integer lockerId, Pageable pageable) {
+        if (!lockerRepository.existsById(lockerId)) {
+            throw new LockerNotFoundException(lockerId);
+        }
+        return lockRepository.findByLocker_Id(lockerId, pageable);
+    }
+
     public List<Lock> getAllBySkiResortId(Integer skiResortId){
         if (!skiResortRepository.existsById(skiResortId)) {
             throw new SkiResortNotFoundException(skiResortId);
         }
         return lockRepository.findByLocker_SkiResort_Id(skiResortId);
+    }
+
+    public Page<Lock> getAllBySkiResortId(Integer skiResortId, Pageable pageable){
+        if (!skiResortRepository.existsById(skiResortId)) {
+            throw new SkiResortNotFoundException(skiResortId);
+        }
+        return lockRepository.findByLocker_SkiResort_Id(skiResortId, pageable);
     }
 
 }

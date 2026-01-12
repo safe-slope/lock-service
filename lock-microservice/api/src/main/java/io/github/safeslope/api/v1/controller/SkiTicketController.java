@@ -6,6 +6,8 @@ import io.github.safeslope.api.v1.mapper.LockEventMapper;
 import io.github.safeslope.api.v1.mapper.SkiTicketMapper;
 import io.github.safeslope.lockevent.service.LockEventService;
 import io.github.safeslope.skiticket.service.SkiTicketService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,8 +34,8 @@ public class SkiTicketController {
     }
 
     @GetMapping
-    public List<SkiTicketDto> list() {
-        return skiTicketMapper.toDtoList(skiTicketService.getAll());
+    public Page<SkiTicketDto> list(Pageable pageable) {
+        return skiTicketService.getAll(pageable).map(skiTicketMapper::toDto);
     }
 
     @GetMapping("/{id}")
@@ -42,8 +44,8 @@ public class SkiTicketController {
     }
 
     @GetMapping("{id}/lock-events")
-    public List<LockEventDto> getLockEvents(@PathVariable Integer id) {
-        return lockEventMapper.toDtoList(lockEventService.getAllBySkiTicket(id));
+    public Page<LockEventDto> getLockEvents(@PathVariable Integer id, Pageable pageable) {
+        return lockEventService.getAllBySkiTicket(id, pageable).map(lockEventMapper::toDto);
     }
 
     @DeleteMapping("/{id}")

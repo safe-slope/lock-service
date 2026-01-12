@@ -9,6 +9,8 @@ import io.github.safeslope.locker.service.LockerService;
 import io.github.safeslope.lockevent.service.LockEventService;
 import io.github.safeslope.skiresort.service.SkiResortService;
 import io.github.safeslope.skiticket.service.SkiTicketService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,8 +55,8 @@ public class SkiResortController {
     }
 
     @GetMapping
-    public List<SkiResortDto> list() {
-        return skiResortService.getAll().stream().map(skiResortMapper::toDto).collect(Collectors.toList());
+    public Page<SkiResortDto> list(Pageable pageable) {
+        return skiResortService.getAll(pageable).map(skiResortMapper::toDto);
     }
 
     @GetMapping("/{id}")
@@ -68,23 +70,23 @@ public class SkiResortController {
     }
 
     @GetMapping("/{id}/lockers")
-    public List<LockerDto> getLockers(@PathVariable Integer id) {
-        return lockerMapper.toDtoList(lockerService.getAllBySkiResortId(id));
+    public Page<LockerDto> getLockers(@PathVariable Integer id, Pageable pageable) {
+        return lockerService.getAllBySkiResortId(id, pageable).map(lockerMapper::toDto);
     }
 
     @GetMapping("/{id}/locks")
-    public List<LockDto> getLocks(@PathVariable Integer id) {
-        return lockMapper.toDtoList(lockService.getAllBySkiResortId(id));
+    public Page<LockDto> getLocks(@PathVariable Integer id, Pageable pageable) {
+        return lockService.getAllBySkiResortId(id, pageable).map(lockMapper::toDto);
     }
 
     @GetMapping("/{id}/lock-events")
-    public List<LockEventDto> getLockEvents(@PathVariable Integer id) {
-        return lockEventMapper.toDtoList(lockEventService.getAllBySkiResort(id));
+    public Page<LockEventDto> getLockEvents(@PathVariable Integer id, Pageable pageable) {
+        return lockEventService.getAllBySkiResort(id, pageable).map(lockEventMapper::toDto);
     }
 
     @GetMapping("{id}/ski-tickets")
-    public List<SkiTicketDto> getSkiTickets(@PathVariable Integer id) {
-        return skiTicketMapper.toDtoList(skiTicketService.getAllBySkiResortId(id));
+    public Page<SkiTicketDto> getSkiTickets(@PathVariable Integer id, Pageable pageable) {
+        return skiTicketService.getAllBySkiResortId(id, pageable).map(skiTicketMapper::toDto);
     }
 
 

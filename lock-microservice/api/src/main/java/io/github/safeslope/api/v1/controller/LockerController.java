@@ -9,6 +9,8 @@ import io.github.safeslope.api.v1.mapper.LockerMapper;
 import io.github.safeslope.entities.Locker;
 import io.github.safeslope.lock.service.LockService;
 import io.github.safeslope.locker.service.LockerService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +35,8 @@ public class LockerController {
     }
 
     @GetMapping
-    public List<LockerDto> list() {
-        return lockerService.getAll().stream().map(lockerMapper::toDto).collect(Collectors.toList());
+    public Page<LockerDto> list(Pageable pageable) {
+        return lockerService.getAll(pageable).map(lockerMapper::toDto);
     }
 
     @GetMapping("/{id}")
@@ -48,8 +50,8 @@ public class LockerController {
     }
 
     @GetMapping("/unassgined")
-    public List<LockerDto> getUnassigned() {
-        return lockerMapper.toDtoList(lockerService.getAllUnassigned());
+    public Page<LockerDto> getUnassigned(Pageable pageable) {
+        return lockerService.getAllUnassigned(pageable).map(lockerMapper::toDto);
     }
 
     @GetMapping("/register")
@@ -69,8 +71,8 @@ public class LockerController {
     }
 
     @GetMapping("/{id}/locks")
-    public List<LockDto> getLocks(@PathVariable Integer id) {
-        return lockMapper.toDtoList(lockService.getAllByLockerId(id));
+    public Page<LockDto> getLocks(@PathVariable Integer id, Pageable pageable) {
+        return lockService.getAllByLockerId(id, pageable).map(lockMapper::toDto);
     }
 
     @DeleteMapping("/{id}")

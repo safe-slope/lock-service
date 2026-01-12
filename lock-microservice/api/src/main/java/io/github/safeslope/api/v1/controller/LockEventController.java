@@ -4,6 +4,8 @@ package io.github.safeslope.api.v1.controller;
 import io.github.safeslope.api.v1.dto.LockEventDto;
 import io.github.safeslope.entities.LockEvent;
 import io.github.safeslope.lockevent.service.LockEventService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +25,8 @@ public class LockEventController {
     }
 
     @GetMapping
-    public List<LockEventDto> list() {
-        return lockEventService.getAll().stream().map(this::toDto).collect(Collectors.toList());
+    public Page<LockEventDto> list(Pageable pageable) {
+        return lockEventService.getAll(pageable).map(this::toDto);
     }
 
     @GetMapping("/{id}")
