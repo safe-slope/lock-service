@@ -130,7 +130,7 @@ public class CommandAuthorizationService {
             );
 
             var resp = antiAbuseClient.post()
-                    .uri("/api/v1/anti-abuse/evaluate") 
+                    .uri("/api/v1/anti-abuse/abuse-verify") 
                     .body(req)
                     .retrieve()
                     .body(EvaluateResponse.class);
