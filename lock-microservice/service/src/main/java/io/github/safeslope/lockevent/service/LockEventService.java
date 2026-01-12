@@ -9,6 +9,8 @@ import io.github.safeslope.skiresort.service.SkiResortNotFoundException;
 import io.github.safeslope.skiticket.repository.SkiTicketRepository;
 import io.github.safeslope.skiticket.service.SkiTicketNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -34,6 +36,10 @@ public class LockEventService {
         return lockEventRepository.findAll();
     }
 
+    public Page<LockEvent> getAll(Pageable pageable) {
+        return lockEventRepository.findAll(pageable);
+    }
+
     public LockEvent get(Integer id) {
         return lockEventRepository.findById(id)
                 .orElseThrow(() -> new LockEventNotFoundException(id));
@@ -46,6 +52,13 @@ public class LockEventService {
         return lockEventRepository.findByLock_IdOrderByEventTimeDesc(lockId);
     }
 
+    public Page<LockEvent> getAllByLock(Integer lockId, Pageable pageable) {
+        if(!lockRepository.existsById(lockId)){
+            throw new LockNotFoundException(lockId);
+        }
+        return lockEventRepository.findByLock_IdOrderByEventTimeDesc(lockId, pageable);
+    }
+
     public List<LockEvent> getAllBySkiTicket(Integer skiTicketId) {
         if (!skiTicketRepository.existsById(skiTicketId)) {
             throw new SkiTicketNotFoundException(skiTicketId);
@@ -53,11 +66,25 @@ public class LockEventService {
         return lockEventRepository.findBySkiTicket_IdOrderByEventTimeDesc(skiTicketId);
     }
 
+    public Page<LockEvent> getAllBySkiTicket(Integer skiTicketId, Pageable pageable) {
+        if (!skiTicketRepository.existsById(skiTicketId)) {
+            throw new SkiTicketNotFoundException(skiTicketId);
+        }
+        return lockEventRepository.findBySkiTicket_IdOrderByEventTimeDesc(skiTicketId, pageable);
+    }
+
     public List<LockEvent> getAllBySkiResort(Integer skiResortId) {
         if (!skiResortRepository.existsById(skiResortId)) {
             throw new SkiResortNotFoundException(skiResortId);
         }
         return lockEventRepository.findByLock_Locker_SkiResort_Id(skiResortId);
+    }
+
+    public Page<LockEvent> getAllBySkiResort(Integer skiResortId, Pageable pageable) {
+        if (!skiResortRepository.existsById(skiResortId)) {
+            throw new SkiResortNotFoundException(skiResortId);
+        }
+        return lockEventRepository.findByLock_Locker_SkiResort_Id(skiResortId, pageable);
     }
 
     public LockEvent create(LockEvent event) {

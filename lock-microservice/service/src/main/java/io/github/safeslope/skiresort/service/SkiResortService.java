@@ -3,6 +3,8 @@ package io.github.safeslope.skiresort.service;
 import io.github.safeslope.entities.SkiResort;
 import io.github.safeslope.skiresort.repository.SkiResortRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +21,10 @@ public class SkiResortService {
 
     public List<SkiResort> getAll() {
         return skiResortRepository.findAll();
+    }
+
+    public Page<SkiResort> getAll(Pageable pageable) {
+        return skiResortRepository.findAll(pageable);
     }
     public SkiResort get(Integer id) {
         return skiResortRepository.findById(id).
