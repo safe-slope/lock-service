@@ -12,6 +12,7 @@ import io.github.safeslope.skiticket.service.SkiTicketService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -55,48 +56,57 @@ public class SkiResortController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'USER')")
     public Page<SkiResortDto> list(Pageable pageable) {
         return skiResortService.getAll(pageable).map(skiResortMapper::toDto);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'USER')")
     public SkiResortDto get(@PathVariable Integer id) {
         return skiResortMapper.toDto(skiResortService.get(id));
     }
 
     @GetMapping("/name/{name}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'USER')")
     public SkiResortDto getByName(@PathVariable String name) {
         return skiResortMapper.toDto(skiResortService.getByName(name));
     }
 
     @GetMapping("/{id}/lockers")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'USER')")
     public Page<LockerDto> getLockers(@PathVariable Integer id, Pageable pageable) {
         return lockerService.getAllBySkiResortId(id, pageable).map(lockerMapper::toDto);
     }
 
     @GetMapping("/{id}/locks")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'USER')")
     public Page<LockDto> getLocks(@PathVariable Integer id, Pageable pageable) {
         return lockService.getAllBySkiResortId(id, pageable).map(lockMapper::toDto);
     }
 
     @GetMapping("/{id}/lock-events")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'USER')")
     public Page<LockEventDto> getLockEvents(@PathVariable Integer id, Pageable pageable) {
         return lockEventService.getAllBySkiResort(id, pageable).map(lockEventMapper::toDto);
     }
 
     @GetMapping("{id}/ski-tickets")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'USER')")
     public Page<SkiTicketDto> getSkiTickets(@PathVariable Integer id, Pageable pageable) {
         return skiTicketService.getAllBySkiResortId(id, pageable).map(skiTicketMapper::toDto);
     }
 
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         skiResortService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
     public ResponseEntity<SkiResortDto> create(@RequestBody SkiResortDto dto) {
         SkiResort saved = skiResortService.create(skiResortMapper.toEntity(dto));
 
