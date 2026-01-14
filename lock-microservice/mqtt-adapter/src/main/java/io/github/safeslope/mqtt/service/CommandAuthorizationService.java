@@ -102,7 +102,7 @@ public class CommandAuthorizationService {
                 //check that the lock is not in maintenance mode
                 return lock.getMode() != Lock.Mode.MAINTENANCE;
             }
-            case null, default -> {
+            default -> {
                 return false;
             }
         }
