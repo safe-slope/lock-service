@@ -61,7 +61,7 @@ public class MqttLockService {
         }
     }
 
-    public void lock(String mac) throws MqttException {
+    public void lock(String mac) {
         Lock lock = lockRepository.findByMacAddress(mac);
 
         if(lock == null){

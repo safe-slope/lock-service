@@ -3,6 +3,7 @@ package io.github.safeslope.api.v1.controller;
 import io.github.safeslope.api.v1.dto.SkiResortDto;
 import io.github.safeslope.api.v1.mapper.SkiResortMapper;
 import io.github.safeslope.skiresort.service.SkiResortService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class TenantController {
     }
 
     @GetMapping("/{id}/ski-resorts")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'USER')")
     public List<SkiResortDto> getSkiResorts(@PathVariable Integer id) {
         return skiResortMapper.toDtoList(skiResortService.getByTenantId(id));
     }
