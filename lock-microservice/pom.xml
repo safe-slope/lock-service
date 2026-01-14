@@ -5,34 +5,29 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.github.safeslope</groupId>
-  <artifactId>lock-service</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <artifactId>lock-microservice</artifactId>
+  <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-
-  <name>Lock Service</name>
-  <description>Lock service with layered modules: api, service, entity</description>
 
   <modules>
     <module>entity</module>
     <module>service</module>
     <module>api</module>
     <module>mqtt-adapter</module>
-    <module>security</module>
   </modules>
 
   <properties>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
     <java.version>21</java.version>
     <lombok.version>1.18.42</lombok.version>
     <mapstruct.version>1.6.3</mapstruct.version>
 
-    <!-- Use the java.version property so modules inherit the target Java release -->
-    <maven.compiler.source>${java.version}</maven.compiler.source>
-    <maven.compiler.target>${java.version}</maven.compiler.target>
-
     <spring.boot.version>3.3.4</spring.boot.version>
     <spring.doc.version>1.8.0</spring.doc.version>
-
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jwt.version>0.12.3</jwt.version>
   </properties>
 
   <build>
@@ -79,7 +74,31 @@
 
   <dependencyManagement>
     <dependencies>
-      <!-- Spring Boot BOM to manage versions of spring-boot starters and many common libraries -->
+      <dependency>
+        <groupId>io.github.safeslope</groupId>
+        <artifactId>api</artifactId>
+        <version>${project.version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.github.safeslope</groupId>
+        <artifactId>service</artifactId>
+        <version>${project.version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.github.safeslope</groupId>
+        <artifactId>mqtt-adapter</artifactId>
+        <version>${project.version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.github.safeslope</groupId>
+        <artifactId>entity</artifactId>
+        <version>${project.version}</version>
+        <scope>compile</scope>
+      </dependency>
+
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
@@ -116,28 +135,6 @@
         <version>${spring.boot.version}</version>
       </dependency>
 
-
-      <dependency>
-        <groupId>io.jsonwebtoken</groupId>
-        <artifactId>jjwt-api</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>io.jsonwebtoken</groupId>
-        <artifactId>jjwt-impl</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>io.jsonwebtoken</groupId>
-        <artifactId>jjwt-jackson</artifactId>
-      </dependency>
-
-      <!-- Source: https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui -->
-      <dependency>
-        <groupId>org.springdoc</groupId>
-        <artifactId>springdoc-openapi-ui</artifactId>
-        <version>${spring.doc.version}</version>
-        <scope>compile</scope>
-      </dependency>
-
       <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
@@ -145,7 +142,6 @@
         <scope>provided</scope>
       </dependency>
 
-      <!-- MapStruct centrally managed here -->
       <dependency>
         <groupId>org.mapstruct</groupId>
         <artifactId>mapstruct</artifactId>
@@ -159,27 +155,6 @@
       </dependency>
 
       <dependency>
-        <groupId>io.github.safeslope</groupId>
-        <artifactId>api</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.github.safeslope</groupId>
-        <artifactId>service</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.github.safeslope</groupId>
-        <artifactId>mqtt-adapter</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.github.safeslope</groupId>
-        <artifactId>entity</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-
-      <dependency>
         <groupId>io.jsonwebtoken</groupId>
         <artifactId>jjwt-api</artifactId>
         <version>${jwt.version}</version>
@@ -196,7 +171,14 @@
         <version>${jwt.version}</version>
         <scope>runtime</scope>
       </dependency>
-      
+
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-ui</artifactId>
+        <version>${spring.doc.version}</version>
+        <scope>compile</scope>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
 </project>
