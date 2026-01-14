@@ -29,6 +29,11 @@
       <artifactId>entity</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>io.github.safeslope</groupId>
+      <artifactId>security</artifactId>
+    </dependency>
+
     <!-- Source: https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui -->
     <dependency>
       <groupId>org.springdoc</groupId>
