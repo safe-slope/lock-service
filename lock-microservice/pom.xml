@@ -29,6 +29,9 @@
     <spring.boot.version>3.3.4</spring.boot.version>
     <spring.doc.version>1.8.0</spring.doc.version>
     <jwt.version>0.12.3</jwt.version>
+    <junit.version>4.12</junit.version>
+    <postgresql.version>42.7.8</postgresql.version>
+    <mockito.version>5.21.0</mockito.version>
   </properties>
 
   <build>
