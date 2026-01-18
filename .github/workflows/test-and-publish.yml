@@ -51,13 +51,13 @@ jobs:
           cache: maven
 
       - name: Build and run tests
-        run: mvn -B clean package --file authentication-microservice/pom.xml
+        run: mvn -B clean package --file lock-microservice/pom.xml
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-jar
-          path: authentication-microservice/api/target/app.jar
+          path: lock-microservice/api/target/app.jar
 
 
   # 3. Create a release using release-please
@@ -97,7 +97,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: app-jar
-          path: authentication-microservice/api/target
+          path: lock-microservice/api/target
 
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
