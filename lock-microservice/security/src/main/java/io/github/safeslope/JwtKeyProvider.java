@@ -11,7 +11,7 @@ import java.util.Base64;
 @Component
 public class JwtKeyProvider {
 
-    @Value("${JWT_PUBLIC_KEY}")
+    @Value("${spring.security.jwt.public-key}")
     private String publicKeyBase64;
 
     public PublicKey publicKey() {
