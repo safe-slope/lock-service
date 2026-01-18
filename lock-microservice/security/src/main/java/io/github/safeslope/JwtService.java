@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import java.security.PublicKey;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -14,11 +14,6 @@ public class JwtService {
 
     public JwtService(JwtKeyProvider jwtKeyProvider) {
         this.jwtKeyProvider = jwtKeyProvider;
-    }
-
-
-    private Key getSignKey() {
-        return jwtKeyProvider.publicKey();
     }
 
     public String extractUserId(String token) {
@@ -61,13 +56,9 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(getSignKey())
+                .verifyWith(jwtKeyProvider.publicKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+                .parseSignedClaims(token)
+                .getPayload();
     }
 }
