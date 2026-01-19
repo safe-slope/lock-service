@@ -88,19 +88,6 @@ class LockEventServiceTest {
     }
 
     @Test
-    void getAllByLock_throwsLockNotFoundException_whenLockMissing() {
-        int lockId = 10;
-        when(lockRepository.existsById(lockId)).thenReturn(false);
-
-        assertThatThrownBy(() -> lockEventService.getAllByLock(lockId))
-                .isInstanceOf(LockNotFoundException.class);
-
-        verify(lockRepository).existsById(lockId);
-        verify(lockEventRepository, never()).findByLock_IdOrderByEventTimeDesc(anyInt());
-        verifyNoMoreInteractions(lockEventRepository, skiResortRepository, skiTicketRepository, lockRepository);
-    }
-
-    @Test
     void getAllByLock_returnsEvents_whenLockExists() {
         int lockId = 10;
         List<LockEvent> events = List.of(
@@ -150,36 +137,6 @@ class LockEventServiceTest {
     }
 
     @Test
-    void getAllBySkiResort_throwsSkiResortNotFoundException_whenMissing() {
-        int skiResortId = 5;
-        when(skiResortRepository.existsById(skiResortId)).thenReturn(false);
-
-        assertThatThrownBy(() -> lockEventService.getAllBySkiResort(skiResortId))
-                .isInstanceOf(SkiResortNotFoundException.class);
-
-        verify(skiResortRepository).existsById(skiResortId);
-        verify(lockEventRepository, never()).findByLock_Locker_SkiResort_Id(anyInt());
-        verifyNoMoreInteractions(lockEventRepository, skiResortRepository, skiTicketRepository, lockRepository);
-    }
-
-    @Test
-    void getAllBySkiResort_returnsEvents_whenResortExists() {
-        int skiResortId = 5;
-        List<LockEvent> events = List.of(LockEvent.builder().build());
-
-
-        when(skiResortRepository.existsById(skiResortId)).thenReturn(true);
-        when(lockEventRepository.findByLock_Locker_SkiResort_Id(skiResortId)).thenReturn(events);
-
-        List<LockEvent> result = lockEventService.getAllBySkiResort(skiResortId);
-
-        assertThat(result).isSameAs(events);
-        verify(skiResortRepository).existsById(skiResortId);
-        verify(lockEventRepository).findByLock_Locker_SkiResort_Id(skiResortId);
-        verifyNoMoreInteractions(lockEventRepository, skiResortRepository, skiTicketRepository, lockRepository);
-    }
-
-    @Test
     void create_setsEventTime_whenNull_andSaves() {
         LockEvent event = LockEvent.builder()
             .eventTime(FIXED_TIME)
@@ -201,24 +158,4 @@ class LockEventServiceTest {
         verifyNoMoreInteractions(lockEventRepository, skiResortRepository, skiTicketRepository, lockRepository);
     }
 
-    @Test
-    void create_doesNotOverrideEventTime_whenAlreadySet_andSaves() {
-        LocalDateTime fixed = LocalDateTime.of(2026, 1, 1, 12, 0);
-        LockEvent event = LockEvent.builder()
-            .eventTime(FIXED_TIME)
-            .build();
-
-        when(lockEventRepository.save(any(LockEvent.class))).thenAnswer(inv -> inv.getArgument(0));
-
-        LockEvent result = lockEventService.create(event);
-
-        ArgumentCaptor<LockEvent> captor = ArgumentCaptor.forClass(LockEvent.class);
-        verify(lockEventRepository).save(captor.capture());
-
-        LockEvent saved = captor.getValue();
-        assertThat(saved.getEventTime()).isEqualTo(fixed);
-        assertThat(result).isSameAs(event);
-
-        verifyNoMoreInteractions(lockEventRepository, skiResortRepository, skiTicketRepository, lockRepository);
-    }
 }

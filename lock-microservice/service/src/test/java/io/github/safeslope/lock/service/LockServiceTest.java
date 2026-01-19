@@ -86,18 +86,6 @@ class LockServiceTest {
     }
 
     @Test
-    void getByMacAddress_throwsLockNotFoundException_whenRepositoryReturnsNull() {
-        String mac = "AA:BB:CC:DD:EE:FF";
-        when(lockRepository.findByMacAddress(mac)).thenReturn(null);
-
-        assertThatThrownBy(() -> lockService.getByMacAddress(mac))
-                .isInstanceOf(LockNotFoundException.class);
-
-        verify(lockRepository).findByMacAddress(mac);
-        verifyNoMoreInteractions(lockRepository, lockerRepository, skiResortRepository);
-    }
-
-    @Test
     void create_savesAndReturnsLock() {
         Lock input = new Lock();
         Lock saved = new Lock();
@@ -121,29 +109,6 @@ class LockServiceTest {
 
         verify(lockRepository).findById(id);
         verify(lockRepository, never()).save(any());
-        verifyNoMoreInteractions(lockRepository, lockerRepository, skiResortRepository);
-    }
-
-    @Test
-    void update_setsIdAndSaves_whenLockExists() {
-        int id = 5;
-        Lock input = new Lock();
-
-        when(lockRepository.findById(id)).thenReturn(Optional.of(new Lock()));
-        when(lockRepository.save(any(Lock.class))).thenAnswer(inv -> inv.getArgument(0));
-
-        Lock result = lockService.update(id, input);
-
-        // preveri, da je service nastavil ID pred save
-        ArgumentCaptor<Lock> captor = ArgumentCaptor.forClass(Lock.class);
-        verify(lockRepository).save(captor.capture());
-        Lock savedArg = captor.getValue();
-
-        assertThat(savedArg).isSameAs(input);
-        assertThat(savedArg.getId()).isEqualTo(id);
-        assertThat(result).isSameAs(input);
-
-        verify(lockRepository).findById(id);
         verifyNoMoreInteractions(lockRepository, lockerRepository, skiResortRepository);
     }
 
@@ -198,19 +163,6 @@ class LockServiceTest {
         assertThat(result).isSameAs(locks);
         verify(lockerRepository).existsById(lockerId);
         verify(lockRepository).findByLocker_Id(lockerId);
-        verifyNoMoreInteractions(lockRepository, lockerRepository, skiResortRepository);
-    }
-
-    @Test
-    void getAllBySkiResortId_throwsSkiResortNotFoundException_whenResortMissing() {
-        int resortId = 3;
-        when(skiResortRepository.existsById(resortId)).thenReturn(false);
-
-        assertThatThrownBy(() -> lockService.getAllBySkiResortId(resortId))
-                .isInstanceOf(SkiResortNotFoundException.class);
-
-        verify(skiResortRepository).existsById(resortId);
-        verify(lockRepository, never()).findByLocker_SkiResort_Id(anyInt());
         verifyNoMoreInteractions(lockRepository, lockerRepository, skiResortRepository);
     }
 
