@@ -22,7 +22,6 @@ Thumbs.db
 
 # Test and documentation files
 **/test/
-*.md
 !README.md
 
 # CI/CD files
