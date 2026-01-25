@@ -1,6 +1,6 @@
 .vscode
 .idea
-.env
+lock-microservice/.env
 
 target/
 pom.xml.tag
@@ -19,3 +19,6 @@ buildNumber.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+DockerfileDev
+docker-compose.yml

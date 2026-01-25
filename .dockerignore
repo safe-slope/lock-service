@@ -22,7 +22,6 @@ Thumbs.db
 
 # Test and documentation files
 **/test/
-*.md
 !README.md
 
 # CI/CD files
@@ -32,5 +31,5 @@ Thumbs.db
 
 # Local development files
 *.log
-.env
+lock-microservice/.env
 .env.local
