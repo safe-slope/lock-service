@@ -1,6 +1,6 @@
 .vscode
 .idea
-.env
+lock-microservice/.env
 
 target/
 pom.xml.tag
@@ -21,3 +21,4 @@ buildNumber.properties
 .classpath
 
 DockerfileDev
+docker-compose.yml
