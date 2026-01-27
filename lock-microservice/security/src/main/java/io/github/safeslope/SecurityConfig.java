@@ -29,6 +29,7 @@ public class SecurityConfig {
 
                 // Configure endpoint authorization
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
                         // All endpoints require authentication
                         .anyRequest().authenticated()
                 )
