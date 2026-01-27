@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/safe-slope/lock-service/compare/lock-microservice-v1.2.0...lock-microservice-v1.2.1) (2026-01-27)
+
+
+### Bug Fixes
+
+* update .dockerignore to exclude `.vscode` folder ([425039c](https://github.com/safe-slope/lock-service/commit/425039c1908babf65e57b7ee339da69ccef4d871))
+
 ## [1.2.0](https://github.com/safe-slope/lock-service/compare/lock-microservice-v1.1.0...lock-microservice-v1.2.0) (2026-01-27)
 
 
