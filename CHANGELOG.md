@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/safe-slope/lock-service/compare/lock-microservice-v1.1.0...lock-microservice-v1.2.0) (2026-01-27)
+
+
+### Features
+
+* configure Spring Boot Actuator for health checks and update security rules ([2e57967](https://github.com/safe-slope/lock-service/commit/2e57967e20aa5cbcd4221974549a869b6b5c98b6))
+* configure Spring Boot Actuator for health checks and update security rules ([7e12f21](https://github.com/safe-slope/lock-service/commit/7e12f215d2129372e8aac2e3171de1f9772accf1))
+
 ## [1.1.0](https://github.com/safe-slope/lock-service/compare/lock-microservice-v1.0.0...lock-microservice-v1.1.0) (2026-01-18)
 
 
