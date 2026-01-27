@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/safe-slope/lock-service/compare/lock-microservice-v1.2.1...lock-microservice-v1.2.2) (2026-01-27)
+
+
+### Bug Fixes
+
+* update GitHub Actions to conditionally run Qodana and remove redundant 'needs' dependency ([fdc1e3d](https://github.com/safe-slope/lock-service/commit/fdc1e3d7e8227a5475aa49142caa27e768df0127))
+
 ## [1.2.1](https://github.com/safe-slope/lock-service/compare/lock-microservice-v1.2.0...lock-microservice-v1.2.1) (2026-01-27)
 
 
