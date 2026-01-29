@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/safe-slope/lock-service/compare/lock-microservice-v1.3.1...lock-microservice-v1.3.2) (2026-01-29)
+
+
+### Bug Fixes
+
+* change JPA ddl-auto config in staging to `update` for schema management ([f178732](https://github.com/safe-slope/lock-service/commit/f178732f40f2b181e16bf4db2b5f63e12fc0f3a8))
+
 ## [1.3.1](https://github.com/safe-slope/lock-service/compare/lock-microservice-v1.3.0...lock-microservice-v1.3.1) (2026-01-29)
 
 
