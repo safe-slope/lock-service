@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/safe-slope/lock-service/compare/lock-microservice-v1.3.0...lock-microservice-v1.3.1) (2026-01-29)
+
+
+### Bug Fixes
+
+* extend kubectl rollout timeout in test-and-publish workflow ([953b037](https://github.com/safe-slope/lock-service/commit/953b0372eff37d24d755cfbe0babaa271cabcce9))
+
 ## [1.3.0](https://github.com/safe-slope/lock-service/compare/lock-microservice-v1.2.2...lock-microservice-v1.3.0) (2026-01-29)
 
 
