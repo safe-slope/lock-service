@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/safe-slope/lock-service/compare/lock-microservice-v1.2.2...lock-microservice-v1.3.0) (2026-01-29)
+
+
+### Features
+
+* enhance CI-CD pipeline with release-based conditional steps and staging deployment ([59e5a08](https://github.com/safe-slope/lock-service/commit/59e5a08b702e05f9f6b4b714d3ffff1effa76f53))
+
 ## [1.2.2](https://github.com/safe-slope/lock-service/compare/lock-microservice-v1.2.1...lock-microservice-v1.2.2) (2026-01-27)
 
 
