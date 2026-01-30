@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.3](https://github.com/safe-slope/lock-service/compare/lock-microservice-v1.3.2...lock-microservice-v1.3.3) (2026-01-30)
+
+
+### Bug Fixes
+
+* added parameters plugin to parent pom ([bc8af76](https://github.com/safe-slope/lock-service/commit/bc8af768726057bb891ebdc7d8a01e4811da634f))
+* added parameters plugin to parent pom ([d418049](https://github.com/safe-slope/lock-service/commit/d41804973843e9d95a34aefb19dda4f1b5423dd8))
+* remove wrong Maven compiler properties from security module pom ([045448b](https://github.com/safe-slope/lock-service/commit/045448b1eaedcbdb7c0f2fa865e362503ec6149d))
+
 ## [1.3.2](https://github.com/safe-slope/lock-service/compare/lock-microservice-v1.3.1...lock-microservice-v1.3.2) (2026-01-29)
 
 
